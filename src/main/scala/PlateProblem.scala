@@ -19,8 +19,27 @@ case class Segment(direction: Direction, length: Int) {
 case class Path(segments: List[Segment])
 case class PlateSolution(paths: List[Path])
 object Util {
+  def getPointsBetween(startPoint: Point, endPoint: Point): Set[Point] = {
+    if(startPoint.x == endPoint.x) {
+      val range =
+        if (startPoint.y <= endPoint.y)
+          startPoint.y to endPoint.y
+        else
+          startPoint.y to endPoint.y by -1
+      range.map(Point(startPoint.x, _)).toSet
+    } else if (startPoint.y == endPoint.y) {
+      val range =
+        if (startPoint.x <= endPoint.x)
+          startPoint.x to endPoint.x
+        else
+          startPoint.x to endPoint.x by -1
+      range.map(Point(_, startPoint.y)).toSet
+    } else Set()
+  }
   def getPoints(startPoint: Point, path: Path): List[Point] = {
-    path.segments.foldLeft(List(startPoint))((points, segments) => segments.getNextPoint(points.head) :: points)
+    val turningPoints = path.segments.foldLeft(List(startPoint))((points, segment) => segment.getNextPoint(points.head) :: points)
+//    turningPoints.foldLeft((List(), startPoint))(((points, lastPoint), nextPoint) => getPointsBetween(poin))
+    turningPoints
   }
 }
 
@@ -28,11 +47,16 @@ case class PlateProblem(width: Int, height: Int, pairs: Set[(Point, Point)])
 {
   def isOutsideOfPlate(point: Point): Boolean = point.x < 0 || point.y < 0 || point.x >= width || point.y >= height
 
+  def countIntersections(plateSolution: PlateSolution): Int = {
+    val allPoints = pairs.toList.map(_._1).zip(plateSolution.paths).flatMap((Util.getPoints _).tupled)
+    allPoints.size - allPoints.toSet.size
+  }
+
   def fitness(plateSolution: PlateSolution): Int = {
+    val k1 = countIntersections(plateSolution)
     val allSegments = plateSolution.paths flatMap (_.segments)
     val k2 = allSegments.map(_.length).sum
     val k3 = allSegments.length
-//    pairs.map(_._1).zip(plateSolution.paths).
 //    val k4 = allSegments.
     //TODO
     1000 - k2 - k3
