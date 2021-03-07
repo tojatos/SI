@@ -23,13 +23,13 @@ class PlateProblemTest extends FunSuite {
   )
   test("Util.getPointsBetween works") {
     val points = Util.getPointsBetween(Point(1, 3), Point(5, 3))
-    assert(points === (1 to 5).map(x => Point(x, 3)).toSet)
-    val points2 = Util.getPointsBetween(Point(3, 8), Point(3, 10))
-    assert(points2 === (8 to 10).map(y => Point(3, y)).toSet)
-    val points3 = Util.getPointsBetween(Point(3, 8), Point(5, 10))
+    assert(points === (2 to 4).map(x => Point(x, 3)).toSet)
+    val points2 = Util.getPointsBetween(Point(3, 8), Point(3, 11))
+    assert(points2 === (9 to 10).map(y => Point(3, y)).toSet)
+    val points3 = Util.getPointsBetween(Point(3, 8), Point(5, 11))
     assert(points3 === Set.empty)
     val points4 = Util.getPointsBetween(Point(3, 3), Point(3, 0))
-    assert(points4 === (0 to 3).map(y => Point(3, y)).toSet)
+    assert(points4 === (1 to 2).map(y => Point(3, y)).toSet)
   }
   test("Util.getPoints works") {
     val points = Util.getPoints(Point(1, 3), Path(List(Segment(Right, 4))))
