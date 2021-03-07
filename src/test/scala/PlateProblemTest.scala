@@ -1,5 +1,6 @@
-import Direction.{Right, Up}
+import pl.krzysztofruczkowski.Direction.{Right, Up}
 import org.scalatest.FunSuite
+import pl.krzysztofruczkowski.{Path, PlateProblem, PlateSolution, Point, Segment, Util}
 
 import scala.language.postfixOps
 
@@ -21,7 +22,7 @@ class PlateProblemTest extends FunSuite {
       )
     )
   )
-  test("Util.getPointsBetween works") {
+  test("pl.krzysztofruczkowski.Util.getPointsBetween works") {
     val points = Util.getPointsBetween(Point(1, 3), Point(5, 3))
     assert(points === (2 to 4).map(x => Point(x, 3)).toSet)
     val points2 = Util.getPointsBetween(Point(3, 8), Point(3, 11))
@@ -31,7 +32,7 @@ class PlateProblemTest extends FunSuite {
     val points4 = Util.getPointsBetween(Point(3, 3), Point(3, 0))
     assert(points4 === (1 to 2).map(y => Point(3, y)).toSet)
   }
-  test("Util.getPoints works") {
+  test("pl.krzysztofruczkowski.Util.getPoints works") {
     val points = Util.getPoints(Point(1, 3), Path(List(Segment(Right, 4))))
     assert(points === (1 to 5).map(x => Point(x, 3)).toList)
   }

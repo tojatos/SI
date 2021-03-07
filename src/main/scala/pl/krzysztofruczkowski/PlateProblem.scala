@@ -1,11 +1,13 @@
+package pl.krzysztofruczkowski
+
+import pl.krzysztofruczkowski.Direction.{Direction, Down, Left, Right, Up}
+
 import scala.language.postfixOps
 
 object Direction extends Enumeration {
   type Direction = Value
   val Up, Down, Left, Right = Value
 }
-
-import Direction._
 case class Segment(direction: Direction, length: Int) {
   def getNextPoint(lastPoint: Point): Point = {
     direction match {
