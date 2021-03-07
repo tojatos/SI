@@ -11,5 +11,4 @@ object Main extends JFXApp {
         title = "Plate problem analyser"
   }
   SceneManager.loadScene(Scenes.Main)
-
 }

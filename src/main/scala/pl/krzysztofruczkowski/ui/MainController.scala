@@ -1,7 +1,7 @@
 package pl.krzysztofruczkowski.ui
 
 import javafx.event.ActionEvent
-import pl.krzysztofruczkowski.{Loader, PlateProblem}
+import pl.krzysztofruczkowski.{Loader, PlateProblem, StaticData}
 import scalafx.scene.control.Button
 import scalafx.scene.layout.VBox
 import scalafxml.core.macros.sfxml
@@ -14,7 +14,8 @@ class MainController(val problemsVbox: VBox) {
   val buttons: Seq[Button] = filenames.zip(problems).map(t => new Button {
     text = t._1
     onAction = (_: ActionEvent) => {
-      println(t._2)
+      println(s"Selected problem: ${t._2}")
+      StaticData.selectedProblem = Some(t._2)
       SceneManager.loadScene(Scenes.Problem)
     }
     prefWidth = 400
@@ -22,6 +23,4 @@ class MainController(val problemsVbox: VBox) {
     maxWidth = Double.MaxValue
   })
   buttons.foreach(b => problemsVbox.children.add(b))
-//  problemsVbox.spacing = 5
-//  problemsVbox.fillWidth = true
 }
