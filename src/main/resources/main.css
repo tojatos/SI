@@ -1,0 +1,14 @@
+.root {
+    -fx-base: rgb(177, 149, 154);
+
+    -fx-background: #333333;
+    -fx-text-fill: #dadada;
+    -fx-font-family: Tunga;
+}
+.button {
+    -fx-background-color: #090a0c;
+    -fx-text-fill: white;
+}
+.button:focused,
+.button:hover {
+}

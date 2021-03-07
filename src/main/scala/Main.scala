@@ -1,10 +1,20 @@
-import scala.language.postfixOps
-import Direction._
+import java.net.URL
+import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
+import scalafx.scene.Scene
+import scalafx.Includes._
+import scalafxml.core.{FXMLView, NoDependencyResolver}
 
-object Main extends App {
-  val filenames = 0 to 3 map ( x => s"zad$x.txt" )
-  val problems = Loader.loadProblems(filenames)
-  problems foreach println
-  val first_problem = problems.head
-  println(first_problem.fitness(PlateSolution(List(Path(List(Segment(Right, 4))), Path(List(Segment(Up, 2)))))))
+import scala.language.postfixOps
+
+object Main extends JFXApp {
+  val filenames: Seq[String] = 0 to 3 map (x => s"zad$x.txt" )
+  val problems: Seq[PlateProblem] = Loader.loadProblems(filenames)
+  val resource: URL = getClass.getResource("main.fxml")
+  val root = FXMLView(resource, NoDependencyResolver)
+  stage = new PrimaryStage {
+        title = "Plate problem analyser"
+        scene = new Scene(root)
+  }
+
 }
