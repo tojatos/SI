@@ -10,5 +10,9 @@ object Main extends JFXApp {
   stage = new PrimaryStage {
         title = "Plate problem analyser"
   }
+//  val po = new RandomPlateProblemOptimizer(problems.head)
+//  for (_ <- 1 to 1000) {
+//    po.iterate()
+//  }
   SceneManager.loadScene(Scenes.Main)
 }

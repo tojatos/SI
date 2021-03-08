@@ -7,6 +7,16 @@ import scala.language.postfixOps
 object Direction extends Enumeration {
   type Direction = Value
   val Up, Down, Left, Right = Value
+  def isVertical(direction: Direction) = List(Up, Down).contains(direction)
+  def isHorizontal(direction: Direction) = List(Left, Right).contains(direction)
+  def opposing(direction: Direction): Direction = {
+    direction match {
+      case Left => Right
+      case Right => Left
+      case Up => Down
+      case Down => Up
+    }
+  }
 }
 case class Segment(direction: Direction, length: Int) {
   def getNextPoint(lastPoint: Point): Point = {
@@ -30,7 +40,7 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
     point.x < 0 || point.y < 0 || point.x >= width || point.y >= height
 
   def getAllPoints(plateSolution: PlateSolution): Seq[Point] =
-    pairs.toList.map(_._1).zip(plateSolution.paths).flatMap((Util.getPoints _).tupled)
+    pairs.map(_._1).zip(plateSolution.paths).flatMap((Util.getPoints _).tupled)
 
   def countIntersections(allPoints: Seq[Point]): Int = {
     allPoints.size - allPoints.toSet.size
@@ -43,8 +53,11 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
     val k2 = allSegments.map(_.length).sum
     val k3 = allSegments.length
     val k5 = allPoints.count(isOutsideOfPlate)
-    //TODO
-    1000 - k1 * 5 - k2 * 1.5 - k3 - k5 * 15
+//    println("k1: " + k1)
+//    println("k2: " + k2)
+//    println("k3: " + k3)
+//    println("k5: " + k5)
+    1000 - k1 * 10 - k2 * 8 - k3 - k5 * 15
   }
 }
 object PlateProblem {

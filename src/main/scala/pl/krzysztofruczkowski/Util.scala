@@ -39,7 +39,7 @@ object Util {
     turningPoints.foldLeft((List[Point](startPoint), startPoint))((tuple, nextPoint) => {
       val acc = tuple._1
       val lastPoint = tuple._2
-      return acc ::: getPointsBetween(lastPoint, nextPoint).toList ::: List(nextPoint)
+      (acc ::: getPointsBetween(lastPoint, nextPoint).toList ::: List(nextPoint), nextPoint)
     })._1
   }
 }

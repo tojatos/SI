@@ -3,18 +3,20 @@ package pl.krzysztofruczkowski.ui
 import java.util.concurrent.Executors
 
 import pl.krzysztofruczkowski.Direction._
-import pl.krzysztofruczkowski.{PlateProblem, PlateSolution, Segment, StaticData}
+import pl.krzysztofruczkowski._
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
+import scalafx.scene.control.Button
 import scalafx.scene.paint.Color._
 import scalafxml.core.macros.sfxml
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
 @sfxml
-class ProblemController(val plateCanvas: Canvas) {
+class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
+  implicit val context: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
   val selectedProblem: PlateProblem = StaticData.selectedProblem.get
   val unit = 30
-  val margin = 100
+  val margin = 300
   val baseCircleUnit = 3
   val bigCircleUnit = 11
   val (w, h) = (selectedProblem.width - 1, selectedProblem.height - 1)
@@ -30,27 +32,29 @@ class ProblemController(val plateCanvas: Canvas) {
 
   val gc: GraphicsContext = plateCanvas.graphicsContext2D
 
-  // fill with green
-  gc.fill = Green
-  gc.fillRect(0, 0, plateCanvas.width.value, plateCanvas.height.value)
+  def drawProblem(): Unit = {
+    // fill with green
+    gc.fill = Green
+    gc.fillRect(0, 0, plateCanvas.width.value, plateCanvas.height.value)
 
-  // draw pins
-  gc.fill = Blue
-  allCanvasPoints.foreach(t =>
-    gc.strokeOval(t._1, t._2, baseCircleUnit, baseCircleUnit)
-  )
+    // draw pins
+    gc.stroke = Black
+    gc.lineWidth = 1
+    allCanvasPoints.foreach(t =>
+      gc.strokeOval(t._1, t._2, baseCircleUnit, baseCircleUnit)
+    )
 
-  selectedProblem.pairs zip infiniteColors foreach(x => {
-    val (points, color) = x
-    val (p1, p2) = (points._1.toTuple, points._2.toTuple)
-    val cp1 = pointToCanvasPointMap(p1)
-    val cp2 = pointToCanvasPointMap(p2)
+    selectedProblem.pairs zip infiniteColors foreach(x => {
+      val (points, color) = x
+      val (p1, p2) = (points._1.toTuple, points._2.toTuple)
+      val cp1 = pointToCanvasPointMap(p1)
+      val cp2 = pointToCanvasPointMap(p2)
 
-    gc.fill = color
-    gc.fillOval(cp1._1 - bigCircleUnit / 2, cp1._2 - bigCircleUnit / 2, bigCircleUnit, bigCircleUnit)
-    gc.fillOval(cp2._1 - bigCircleUnit / 2, cp2._2 - bigCircleUnit / 2, bigCircleUnit, bigCircleUnit)
-  })
-  println(pointToCanvasPointMap)
+      gc.fill = color
+      gc.fillOval(cp1._1 - bigCircleUnit / 2, cp1._2 - bigCircleUnit / 2, bigCircleUnit, bigCircleUnit)
+      gc.fillOval(cp2._1 - bigCircleUnit / 2, cp2._2 - bigCircleUnit / 2, bigCircleUnit, bigCircleUnit)
+    })
+  }
 
   def drawSolution(plateSolution: PlateSolution): Unit = {
     (selectedProblem.pairs map(_._1) lazyZip plateSolution.paths lazyZip infiniteColors).toList.foreach { args =>
@@ -72,13 +76,40 @@ class ProblemController(val plateCanvas: Canvas) {
       }
       gc.strokePath()
     }
-
   }
-
-  implicit val context: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-  val f = Future {
-    drawSolution(selectedProblem.getTrivialSolution)
+//  val snapshot = new WritableImage(plateCanvas.width.toInt, plateCanvas.height.toInt)
+//  snapshot = plateCanvas.snapshot(new SnapshotParameters(), snapshot)
+//    gc.drawImage(snapshot, plateCanvas.width.toDouble, plateCanvas.height.toDouble)
+  def reset(): Unit = {
+    drawProblem()
   }
+  reset()
+
+  val po = new RandomPlateProblemOptimizer(selectedProblem)
+  Future {
+    drawSolution(po.best)
+  }
+  def iterate(): Unit = {
+    po.iterate()
+    if(po.iteration % 50 == 0) {
+        reset()
+        drawSolution(po.last)
+    }
+  }
+//    iterButton.onAction = _ => iterate()
+  iterButton.onAction = _ => {
+    Future {
+      for (_ <- 1 to 10000) {
+        iterate()
+      }
+      reset()
+      drawSolution(po.best)
+      println("Best: " + po.bestFitness)
+    }
+  }
+//  for (_ <- 1 to 1000) {
+//    po.iterate()
+//  }
 
 //  val snapshot = plateCanvas.snapshot(new SnapshotParameters(), null)
 //
