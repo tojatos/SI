@@ -16,10 +16,8 @@ class RandomPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long = new R
   def mutate(plateSolution: PlateSolution): PlateSolution = {
     val randomPathIndex = random.nextInt(plateSolution.paths.length)
     val randomPath: Path = plateSolution.paths(randomPathIndex)
-//    val randomDirection: Direction = Direction(random.nextInt(Direction.maxId))
     val segments = randomPath.segments
     val randomSegmentIndex = random.nextInt(segments.length)
-//    val step = 1
 
     val segmentBefore = if (randomSegmentIndex == 0) None else Some(segments(randomSegmentIndex-1))
     val segment = segments(randomSegmentIndex)
@@ -41,13 +39,14 @@ class RandomPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long = new R
     } else {
       Segment(dir2, sa.length + 1 * forwardM)
     }
-//    println(sb, sa)
-//    println(newSb, newSa)
-    // replace segments
+    // replace segments and filter empty
     val newSegments: List[Segment] =
       (segments.take(randomSegmentIndex - 1) :::
         newSb :: segment :: newSa ::
         segments.slice(randomSegmentIndex+2, segments.length)).filter(_.length != 0)
+
+    // after the filtering reduce segments from the right
+    // example: (Segment(Left, 4), Segment(Right, 3)) => Segment(Left, 1)
     val newSegmentsReduced = newSegments.foldRight(List[Segment]())((segment, acc) => {
         if(acc.isEmpty) {
           segment :: acc
@@ -61,8 +60,10 @@ class RandomPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long = new R
         }
     })
 
+    // swap negative values after reduction
     val newSegmentsFixed = newSegmentsReduced.map(s => if (s.length > 0) s else Segment(Direction.opposing(s.direction), -s.length))
 
+    // replace the modified path
     val newPaths = plateSolution.paths.updated(randomPathIndex, Path(newSegmentsFixed))
     PlateSolution(newPaths)
   }
@@ -72,7 +73,7 @@ class RandomPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long = new R
   var iteration = 0
   override def iterate(): Unit = {
     iteration += 1
-    if(iteration % 200 == 0) last = best //reset to best every 100 times
+    if(iteration % Const.RANDOM_PLATE_PO_RESET_EVERY == 0) last = best //reset to best every x times
     val newSolution: PlateSolution = mutate(last)
     last = newSolution
 //    println(newSolution)

@@ -88,20 +88,19 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
   }
   def iterate(): Unit = {
     po.iterate()
-    if(po.iteration % 200 == 0) {
+    if(po.iteration % Const.PROBLEM_CONTROLLER_REDRAW_EVERY == 0) {
         reset()
         drawSolution(po.last)
     }
   }
-//    iterButton.onAction = _ => iterate()
+
   iterButton.onAction = _ => {
     Future {
-      for (_ <- 1 to 10000) {
+      for (_ <- 1 to Const.PROBLEM_CONTROLLER_NUMBER_OF_ITERATIONS) {
         iterate()
       }
       reset()
       drawSolution(po.best)
-//      println("Best: " + po.bestFitness)
     }
   }
 }

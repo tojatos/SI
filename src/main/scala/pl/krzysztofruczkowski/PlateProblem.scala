@@ -59,7 +59,7 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
 //    println("k2: " + k2)
 //    println("k3: " + k3)
 //    println("k5: " + k5)
-    10000 - k1 * 700 - k2 * 3 - k3 - k5 * 1500
+    10000 - k1 * Const.K1_WEIGHT - k2 * Const.K2_WEIGHT - k3 * Const.K3_WEIGHT - k5 * Const.K5_WEIGHT
   }
 }
 object PlateProblem {
