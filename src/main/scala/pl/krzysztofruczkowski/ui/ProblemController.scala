@@ -1,10 +1,14 @@
 package pl.krzysztofruczkowski.ui
 
+import java.util.concurrent.Executors
+
 import pl.krzysztofruczkowski.Direction._
 import pl.krzysztofruczkowski.{PlateProblem, PlateSolution, Segment, StaticData}
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.paint.Color._
 import scalafxml.core.macros.sfxml
+
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
 @sfxml
 class ProblemController(val plateCanvas: Canvas) {
@@ -37,23 +41,23 @@ class ProblemController(val plateCanvas: Canvas) {
   )
 
   selectedProblem.pairs zip infiniteColors foreach(x => {
-    val p = x._1
-    val p1 = (p._1.x, p._1.y)
-    val p2 = (p._2.x, p._2.y)
+    val (points, color) = x
+    val (p1, p2) = (points._1.toTuple, points._2.toTuple)
     val cp1 = pointToCanvasPointMap(p1)
     val cp2 = pointToCanvasPointMap(p2)
 
-    gc.fill = x._2
-    gc.fillOval(cp1._1, cp1._2, bigCircleUnit, bigCircleUnit)
-    gc.fillOval(cp2._1, cp2._2, bigCircleUnit, bigCircleUnit)
+    gc.fill = color
+    gc.fillOval(cp1._1 - bigCircleUnit / 2, cp1._2 - bigCircleUnit / 2, bigCircleUnit, bigCircleUnit)
+    gc.fillOval(cp2._1 - bigCircleUnit / 2, cp2._2 - bigCircleUnit / 2, bigCircleUnit, bigCircleUnit)
   })
+  println(pointToCanvasPointMap)
 
   def drawSolution(plateSolution: PlateSolution): Unit = {
     (selectedProblem.pairs map(_._1) lazyZip plateSolution.paths lazyZip infiniteColors).toList.foreach { args =>
       val (startPoint, path, color) = args
       var (x, y) = pointToCanvasPointMap(startPoint.x, startPoint.y)
       gc.fill = color
-      gc.lineWidth = 5
+      gc.lineWidth = 4
       gc.stroke = color
       gc.beginPath()
       gc.moveTo(x, y)
@@ -66,12 +70,15 @@ class ProblemController(val plateCanvas: Canvas) {
         }
         gc.lineTo(x, y)
       }
-      gc.closePath()
       gc.strokePath()
     }
 
   }
-  drawSolution(selectedProblem.getTrivialSolution)
+
+  implicit val context: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
+  val f = Future {
+    drawSolution(selectedProblem.getTrivialSolution)
+  }
 
 //  val snapshot = plateCanvas.snapshot(new SnapshotParameters(), null)
 //

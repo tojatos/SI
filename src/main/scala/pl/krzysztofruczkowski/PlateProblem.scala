@@ -21,10 +21,10 @@ case class Segment(direction: Direction, length: Int) {
 case class Path(segments: List[Segment])
 case class PlateSolution(paths: List[Path])
 
-case class PlateProblem(width: Int, height: Int, pairs: Set[(Point, Point)])
+case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
 {
   def getTrivialSolution: PlateSolution =
-    PlateSolution(pairs.toList.map((Util.getTrivialPath _).tupled))
+    PlateSolution(pairs.map((Util.getTrivialPath _).tupled))
 
   def isOutsideOfPlate(point: Point): Boolean =
     point.x < 0 || point.y < 0 || point.x >= width || point.y >= height
@@ -51,8 +51,8 @@ object PlateProblem {
   def deserialize(from: Iterator[String]): PlateProblem = {
     val wh = from.next().split(';') map (_.toInt)
     val (w, h) = (wh(0), wh(1))
-    val set: Set[(Point, Point)] = from map (_.split(';') map (_.toInt)) map {x => (Point(x(0), x(1)), Point(x(2), x(3)))} toSet
+    val pairs: List[(Point, Point)] = from map (_.split(';') map (_.toInt)) map {x => (Point(x(0), x(1)), Point(x(2), x(3)))} toList
 
-    PlateProblem(w, h, set)
+    PlateProblem(w, h, pairs)
   }
 }
