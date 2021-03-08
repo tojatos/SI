@@ -1,7 +1,7 @@
 package pl.krzysztofruczkowski.ui
 
-import pl.krzysztofruczkowski.{PlateProblem, StaticData}
-import scalafx.scene.SnapshotParameters
+import pl.krzysztofruczkowski.Direction._
+import pl.krzysztofruczkowski.{PlateProblem, PlateSolution, Segment, StaticData}
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.paint.Color._
 import scalafxml.core.macros.sfxml
@@ -16,7 +16,7 @@ class ProblemController(val plateCanvas: Canvas) {
   val (w, h) = (selectedProblem.width - 1, selectedProblem.height - 1)
   val allPoints = for (a_ <- 0 to w; b_ <- 0 to h) yield (a_, b_)
   val allCanvasPoints = allPoints.map(p => (p._1 * unit + margin / 2, p._2 * unit + margin / 2))
-  val pointToCanvasPointMap = allPoints zip allCanvasPoints toMap
+  val pointToCanvasPointMap = allPoints zip allCanvasPoints.map(x => (x._1.toDouble, x._2.toDouble)) toMap
   val colors = List(Red, DarkOrange, Violet, Black, White, Cyan, Yellow, Brown, Chocolate, Wheat, Aqua)
 
   val infiniteColors = LazyList.continually(colors).flatten
@@ -47,6 +47,31 @@ class ProblemController(val plateCanvas: Canvas) {
     gc.fillOval(cp1._1, cp1._2, bigCircleUnit, bigCircleUnit)
     gc.fillOval(cp2._1, cp2._2, bigCircleUnit, bigCircleUnit)
   })
+
+  def drawSolution(plateSolution: PlateSolution): Unit = {
+    (selectedProblem.pairs map(_._1) lazyZip plateSolution.paths lazyZip infiniteColors).toList.foreach { args =>
+      val (startPoint, path, color) = args
+      var (x, y) = pointToCanvasPointMap(startPoint.x, startPoint.y)
+      gc.fill = color
+      gc.lineWidth = 5
+      gc.stroke = color
+      gc.beginPath()
+      gc.moveTo(x, y)
+      path.segments.foreach { a =>
+        a match {
+          case Segment(Right, value) => x += value * unit
+          case Segment(Left, value) => x -= value * unit
+          case Segment(Up, value) => y += value * unit
+          case Segment(Down, value) => y -= value * unit
+        }
+        gc.lineTo(x, y)
+      }
+      gc.closePath()
+      gc.strokePath()
+    }
+
+  }
+  drawSolution(selectedProblem.getTrivialSolution)
 
 //  val snapshot = plateCanvas.snapshot(new SnapshotParameters(), null)
 //
