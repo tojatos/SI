@@ -35,11 +35,15 @@ object Util {
     } else Set()
   }
   def getPoints(startPoint: Point, path: Path): List[Point] = {
-    val turningPoints = path.segments.foldLeft(List(startPoint))((points, segment) => segment.getNextPoint(points.head) :: points)
-    turningPoints.foldLeft((List[Point](startPoint), startPoint))((tuple, nextPoint) => {
-      val acc = tuple._1
-      val lastPoint = tuple._2
-      (acc ::: getPointsBetween(lastPoint, nextPoint).toList ::: List(nextPoint), nextPoint)
-    })._1
+    val turningPoints = path.segments.foldLeft(List(startPoint))((points, segment) => segment.getNextPoint(points.head) :: points).reverse
+    turningPoints.foldLeft(List[Point]())((tuple, nextPoint) => {
+      if(tuple.nonEmpty) {
+        val lastPoint = tuple.last
+        val pointsBetween = getPointsBetween(lastPoint, nextPoint).toList
+        tuple ::: pointsBetween ::: List(nextPoint)
+      } else {
+        List(nextPoint)
+      }
+    })
   }
 }

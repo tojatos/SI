@@ -11,6 +11,8 @@ class RandomPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long = new R
   var last: PlateSolution = best
   var bestFitness: Double = plateProblem.fitness(best)
 
+  println(s"Initial fitness: $bestFitness")
+
   def mutate(plateSolution: PlateSolution): PlateSolution = {
     val randomPathIndex = random.nextInt(plateSolution.paths.length)
     val randomPath: Path = plateSolution.paths(randomPathIndex)
