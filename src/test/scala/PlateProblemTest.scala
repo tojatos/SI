@@ -37,7 +37,7 @@ class PlateProblemTest extends FunSuite {
     assert(points === (1 to 5).map(x => Point(x, 3)).toList)
   }
   test("Intersections count works") {
-    val intersectionCount = problem.countIntersections(solution)
+    val intersectionCount = problem.countIntersections(problem.getAllPoints(solution))
     assert(intersectionCount === 1)
   }
 }

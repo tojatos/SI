@@ -52,19 +52,22 @@ case class PlateProblem(width: Int, height: Int, pairs: Set[(Point, Point)])
 {
   def isOutsideOfPlate(point: Point): Boolean = point.x < 0 || point.y < 0 || point.x >= width || point.y >= height
 
-  def countIntersections(plateSolution: PlateSolution): Int = {
-    val allPoints = pairs.toList.map(_._1).zip(plateSolution.paths).flatMap((Util.getPoints _).tupled)
+  def getAllPoints(plateSolution: PlateSolution): Seq[Point] =
+    pairs.toList.map(_._1).zip(plateSolution.paths).flatMap((Util.getPoints _).tupled)
+
+  def countIntersections(allPoints: Seq[Point]): Int = {
     allPoints.size - allPoints.toSet.size
   }
 
-  def fitness(plateSolution: PlateSolution): Int = {
-    val k1 = countIntersections(plateSolution)
+  def fitness(plateSolution: PlateSolution): Double = {
+    val allPoints = getAllPoints(plateSolution)
+    val k1 = countIntersections(allPoints)
     val allSegments = plateSolution.paths flatMap (_.segments)
     val k2 = allSegments.map(_.length).sum
     val k3 = allSegments.length
-//    val k4 = allSegments.
+    val k5 = allPoints.count(isOutsideOfPlate)
     //TODO
-    1000 - k2 - k3
+    1000 - k1 * 5 - k2 * 1.5 - k3 - k5 * 15
   }
 }
 object PlateProblem {

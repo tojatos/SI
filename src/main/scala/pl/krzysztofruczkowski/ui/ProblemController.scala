@@ -1,9 +1,9 @@
 package pl.krzysztofruczkowski.ui
 
-import pl.krzysztofruczkowski.{PlateProblem, Point, StaticData}
+import pl.krzysztofruczkowski.{PlateProblem, StaticData}
+import scalafx.scene.SnapshotParameters
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.paint.Color._
-import scalafx.scene.paint.{Color, Paint}
 import scalafxml.core.macros.sfxml
 
 @sfxml
@@ -48,6 +48,9 @@ class ProblemController(val plateCanvas: Canvas) {
     gc.fillOval(cp2._1, cp2._2, bigCircleUnit, bigCircleUnit)
   })
 
-
-
+//  val snapshot = plateCanvas.snapshot(new SnapshotParameters(), null)
+//
+//  def reset(): Unit = {
+//    gc.drawImage(snapshot)
+//  }
 }
