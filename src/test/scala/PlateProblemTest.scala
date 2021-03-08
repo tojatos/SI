@@ -40,4 +40,7 @@ class PlateProblemTest extends FunSuite {
     val intersectionCount = problem.countIntersections(problem.getAllPoints(solution))
     assert(intersectionCount === 1)
   }
+  test("Trivial solution works") {
+    assert(problem.getTrivialSolution === solution)
+  }
 }
