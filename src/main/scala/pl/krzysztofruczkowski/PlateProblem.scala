@@ -43,8 +43,8 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
     pairs.map(_._1).zip(plateSolution.paths).flatMap((Util.getPoints _).tupled)
 
   def countIntersections(allPoints: Seq[Point]): Int = {
-    println(allPoints)
-    println(allPoints.toSet)
+//    println(allPoints)
+//    println(allPoints.toSet)
     allPoints.size - allPoints.toSet.size
   }
 
@@ -55,11 +55,11 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
     val k2 = allSegments.map(_.length).sum
     val k3 = allSegments.length
     val k5 = allPoints.count(isOutsideOfPlate)
-    println("k1: " + k1)
-    println("k2: " + k2)
-    println("k3: " + k3)
-    println("k5: " + k5)
-    10000 - k1 * 100 - k2 * 3 - k3 - k5 * 150
+//    println("k1: " + k1)
+//    println("k2: " + k2)
+//    println("k3: " + k3)
+//    println("k5: " + k5)
+    10000 - k1 * 700 - k2 * 3 - k3 - k5 * 1500
   }
 }
 object PlateProblem {

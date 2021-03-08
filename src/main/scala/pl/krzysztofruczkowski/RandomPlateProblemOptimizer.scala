@@ -72,7 +72,7 @@ class RandomPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long = new R
   var iteration = 0
   override def iterate(): Unit = {
     iteration += 1
-    if(iteration % 100 == 0) last = best //reset to best every 100 times
+    if(iteration % 200 == 0) last = best //reset to best every 100 times
     val newSolution: PlateSolution = mutate(last)
     last = newSolution
 //    println(newSolution)

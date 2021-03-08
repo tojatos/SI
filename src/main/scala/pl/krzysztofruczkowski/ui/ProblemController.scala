@@ -77,9 +77,6 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
       gc.strokePath()
     }
   }
-//  val snapshot = new WritableImage(plateCanvas.width.toInt, plateCanvas.height.toInt)
-//  snapshot = plateCanvas.snapshot(new SnapshotParameters(), snapshot)
-//    gc.drawImage(snapshot, plateCanvas.width.toDouble, plateCanvas.height.toDouble)
   def reset(): Unit = {
     drawProblem()
   }
@@ -91,7 +88,7 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
   }
   def iterate(): Unit = {
     po.iterate()
-    if(po.iteration % 50 == 0) {
+    if(po.iteration % 200 == 0) {
         reset()
         drawSolution(po.last)
     }
@@ -104,16 +101,7 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
       }
       reset()
       drawSolution(po.best)
-      println("Best: " + po.bestFitness)
+//      println("Best: " + po.bestFitness)
     }
   }
-//  for (_ <- 1 to 1000) {
-//    po.iterate()
-//  }
-
-//  val snapshot = plateCanvas.snapshot(new SnapshotParameters(), null)
-//
-//  def reset(): Unit = {
-//    gc.drawImage(snapshot)
-//  }
 }
