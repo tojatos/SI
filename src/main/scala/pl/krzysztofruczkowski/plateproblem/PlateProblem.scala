@@ -1,6 +1,7 @@
 package pl.krzysztofruczkowski.plateproblem
 
 import scala.language.postfixOps
+import scala.util.Random
 
 case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
 {
@@ -24,6 +25,21 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
     val k5 = allPoints.count(isOutsideOfPlate)
 
     - k1 * Const.K1_WEIGHT - k2 * Const.K2_WEIGHT - k3 * Const.K3_WEIGHT - k5 * Const.K5_WEIGHT
+  }
+
+  def generateRandomSolution(random: Random = new Random()): PlateSolution = {
+    var s = getTrivialSolution
+    (1 to pairs.length * 30) foreach (_ => {
+      var x = s.randomMutate(random)
+      var k5 = getAllPoints(x).count(isOutsideOfPlate)
+      while(k5 >= 10) {
+        x = s.randomMutate(random)
+        k5 = getAllPoints(x).count(isOutsideOfPlate)
+      }
+      s = x
+    })
+    println(s)
+    s
   }
 }
 object PlateProblem {

@@ -5,12 +5,14 @@ import java.util.concurrent.Executors
 import pl.krzysztofruczkowski.plateproblem.Direction._
 import pl.krzysztofruczkowski._
 import pl.krzysztofruczkowski.plateproblem.{Const, PlateProblem, PlateSolution, RandomMutationPlateProblemOptimizer, Segment, StaticData}
+import scalafx.beans.property.ObjectProperty
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.control.Button
 import scalafx.scene.paint.Color._
 import scalafxml.core.macros.sfxml
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
+import scala.util.Random
 
 @sfxml
 class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
@@ -95,13 +97,21 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
     }
   }
 
-  iterButton.onAction = _ => {
-    Future {
-      for (_ <- 1 to Const.PROBLEM_CONTROLLER_NUMBER_OF_ITERATIONS) {
-        iterate()
+  val iterAction  = () => {
+      Future {
+        for (_ <- 1 to Const.PROBLEM_CONTROLLER_NUMBER_OF_ITERATIONS) {
+          iterate()
+        }
+        reset()
+        drawSolution(po.best)
       }
+    }
+  val random = new Random()
+  val randAction = () => {
+    Future {
       reset()
-      drawSolution(po.best)
+      drawSolution(selectedProblem.generateRandomSolution(random))
     }
   }
+    iterButton.onAction = _ => iterAction();
 }

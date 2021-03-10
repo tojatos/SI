@@ -6,7 +6,7 @@ class RandomMutationPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long
   val random = new Random(seed)
   println(s"Used seed: $seed")
 
-  var best: PlateSolution = plateProblem.getTrivialSolution
+  var best: PlateSolution = plateProblem.generateRandomSolution(random)
   var last: PlateSolution = best
   var bestFitness: Double = plateProblem.fitness(best)
 

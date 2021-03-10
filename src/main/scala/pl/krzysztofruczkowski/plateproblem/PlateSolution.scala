@@ -60,5 +60,4 @@ case class PlateSolution(paths: List[Path]) {
     val newPaths = paths.updated(randomPathIndex, Path(newSegmentsFixed))
     PlateSolution(newPaths)
   }
-
 }
