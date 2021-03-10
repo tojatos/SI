@@ -1,5 +1,6 @@
-package pl.krzysztofruczkowski
-import Direction._
+package pl.krzysztofruczkowski.plateproblem
+
+import pl.krzysztofruczkowski.plateproblem.Direction._
 
 object Util {
   def getTrivialPath(startPoint: Point, endPoint: Point): Path = {

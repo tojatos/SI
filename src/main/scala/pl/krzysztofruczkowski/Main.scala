@@ -1,5 +1,6 @@
 package pl.krzysztofruczkowski
 
+import pl.krzysztofruczkowski.plateproblem.{Loader, PlateProblem}
 import pl.krzysztofruczkowski.ui.{SceneManager, Scenes}
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage

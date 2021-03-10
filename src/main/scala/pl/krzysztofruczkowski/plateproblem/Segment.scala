@@ -1,6 +1,6 @@
-package pl.krzysztofruczkowski
+package pl.krzysztofruczkowski.plateproblem
 
-import pl.krzysztofruczkowski.Direction.{Direction, Down, Left, Right, Up}
+import pl.krzysztofruczkowski.plateproblem.Direction.{Direction, Down, Left, Right, Up}
 
 case class Segment(direction: Direction, length: Int) {
   def getNextPoint(lastPoint: Point): Point = {

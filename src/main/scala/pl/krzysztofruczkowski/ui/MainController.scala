@@ -1,7 +1,7 @@
 package pl.krzysztofruczkowski.ui
 
 import javafx.event.ActionEvent
-import pl.krzysztofruczkowski.{Loader, PlateProblem, StaticData}
+import pl.krzysztofruczkowski.plateproblem.{Loader, PlateProblem, StaticData}
 import scalafx.scene.control.Button
 import scalafx.scene.layout.VBox
 import scalafxml.core.macros.sfxml

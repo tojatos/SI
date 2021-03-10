@@ -2,8 +2,9 @@ package pl.krzysztofruczkowski.ui
 
 import java.util.concurrent.Executors
 
-import pl.krzysztofruczkowski.Direction._
+import pl.krzysztofruczkowski.plateproblem.Direction._
 import pl.krzysztofruczkowski._
+import pl.krzysztofruczkowski.plateproblem.{Const, PlateProblem, PlateSolution, RandomMutationPlateProblemOptimizer, Segment, StaticData}
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.control.Button
 import scalafx.scene.paint.Color._

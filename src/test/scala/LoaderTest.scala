@@ -1,5 +1,5 @@
 import org.scalatest.FunSuite
-import pl.krzysztofruczkowski.Loader
+import pl.krzysztofruczkowski.plateproblem.Loader
 
 class LoaderTest extends FunSuite {
   test("Loader.loadProblems") {

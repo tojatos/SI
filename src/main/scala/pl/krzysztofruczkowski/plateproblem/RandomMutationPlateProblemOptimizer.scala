@@ -1,4 +1,5 @@
-package pl.krzysztofruczkowski
+package pl.krzysztofruczkowski.plateproblem
+
 import scala.util.Random
 
 class RandomMutationPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long = new Random().nextLong()) extends PlateProblemOptimizer(plateProblem) {

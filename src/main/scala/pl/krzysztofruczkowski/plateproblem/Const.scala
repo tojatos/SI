@@ -1,4 +1,4 @@
-package pl.krzysztofruczkowski
+package pl.krzysztofruczkowski.plateproblem
 
 object Const {
   val K1_WEIGHT = 700

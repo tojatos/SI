@@ -1,6 +1,7 @@
-package pl.krzysztofruczkowski
+package pl.krzysztofruczkowski.plateproblem
 
-import pl.krzysztofruczkowski.Direction.{Down, Left, Right, Up, isHorizontal}
+import pl.krzysztofruczkowski.plateproblem
+import pl.krzysztofruczkowski.plateproblem.Direction.{Down, Left, Right, Up, isHorizontal}
 
 import scala.util.Random
 
@@ -18,18 +19,18 @@ case class PlateSolution(paths: List[Path]) {
     val forwardM = if(forward) 1 else -1
 
     val (dir1, dir2) = if(isHorizontal(segment.direction)) (Down, Up) else (Left, Right)
-    val sb = segmentBefore.getOrElse(Segment(if(forward) dir1 else dir2, 0))
-    val sa = segmentAfter.getOrElse(Segment(if(forward) dir2 else dir1, 0))
+    val sb = segmentBefore.getOrElse(plateproblem.Segment(if(forward) dir1 else dir2, 0))
+    val sa = segmentAfter.getOrElse(plateproblem.Segment(if(forward) dir2 else dir1, 0))
     val newSb = if(sb.direction == dir2) {
-      Segment(dir2, sb.length - 1 * forwardM)
+      plateproblem.Segment(dir2, sb.length - 1 * forwardM)
     } else {
-      Segment(dir1, sb.length + 1 * forwardM)
+      plateproblem.Segment(dir1, sb.length + 1 * forwardM)
     }
 
     val newSa = if(sa.direction == dir1) {
-      Segment(dir1, sa.length - 1 * forwardM)
+      plateproblem.Segment(dir1, sa.length - 1 * forwardM)
     } else {
-      Segment(dir2, sa.length + 1 * forwardM)
+      plateproblem.Segment(dir2, sa.length + 1 * forwardM)
     }
     // replace segments and filter empty
     val newSegments: List[Segment] =
@@ -53,7 +54,7 @@ case class PlateSolution(paths: List[Path]) {
     })
 
     // swap negative values after reduction
-    val newSegmentsFixed = newSegmentsReduced.map(s => if (s.length > 0) s else Segment(Direction.opposing(s.direction), -s.length))
+    val newSegmentsFixed = newSegmentsReduced.map(s => if (s.length > 0) s else plateproblem.Segment(Direction.opposing(s.direction), -s.length))
 
     // replace the modified path
     val newPaths = paths.updated(randomPathIndex, Path(newSegmentsFixed))

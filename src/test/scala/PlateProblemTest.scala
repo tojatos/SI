@@ -1,11 +1,12 @@
-import pl.krzysztofruczkowski.Direction.{Right, Up}
 import org.scalatest.FunSuite
-import pl.krzysztofruczkowski.{Path, PlateProblem, PlateSolution, Point, Segment, Util}
+import pl.krzysztofruczkowski.plateproblem
+import pl.krzysztofruczkowski.plateproblem.Direction.{Right, Up}
+import pl.krzysztofruczkowski.plateproblem._
 
 import scala.language.postfixOps
 
 class PlateProblemTest extends FunSuite {
-  val problem: PlateProblem = PlateProblem(
+  val problem: PlateProblem = plateproblem.PlateProblem(
     6,6,
     List(
       (Point(1,3),Point(5,3)),

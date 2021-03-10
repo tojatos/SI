@@ -1,4 +1,4 @@
-package pl.krzysztofruczkowski
+package pl.krzysztofruczkowski.plateproblem
 
 import scala.io.Source
 import scala.language.postfixOps
