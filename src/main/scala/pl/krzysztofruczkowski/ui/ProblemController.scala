@@ -82,7 +82,7 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
   }
   reset()
 
-  val po = new RandomPlateProblemOptimizer(selectedProblem)
+  val po = new RandomMutationPlateProblemOptimizer(selectedProblem)
   Future {
     drawSolution(po.best)
   }
