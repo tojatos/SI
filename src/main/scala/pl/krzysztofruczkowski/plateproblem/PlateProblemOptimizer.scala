@@ -1,6 +1,6 @@
 package pl.krzysztofruczkowski.plateproblem
 
-abstract class PlateProblemOptimizer(plateProblem: PlateProblem) {
-  def getBest: PlateSolution
+trait PlateProblemOptimizer {
+  def getBest: ConcretePlateSolution
   def iterate(): Unit
 }

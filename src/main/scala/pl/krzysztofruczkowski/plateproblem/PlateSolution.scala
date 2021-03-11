@@ -60,4 +60,10 @@ case class PlateSolution(paths: List[Path]) {
     val newPaths = paths.updated(randomPathIndex, Path(newSegmentsFixed))
     PlateSolution(newPaths)
   }
+  def cross(other: PlateSolution, random: Random): PlateSolution = {
+    val pathsToReplace = paths.length / 2
+    val takeFromOriginalAtIndex = random.shuffle(List.fill(pathsToReplace)(false) ::: List.fill(paths.length - pathsToReplace)(true))
+    val newPaths = paths.indices.map(i => if(takeFromOriginalAtIndex(i)) paths(i) else other.paths(i)).toList
+    PlateSolution(newPaths)
+  }
 }

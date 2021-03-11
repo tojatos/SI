@@ -87,13 +87,13 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
 
   val po = new RandomMutationPlateProblemOptimizer(selectedProblem)
   Future {
-    drawSolution(po.best)
+    drawSolution(po.best.plateSolution)
   }
   def iterate(): Unit = {
     po.iterate()
     if(po.iteration % Const.PROBLEM_CONTROLLER_REDRAW_EVERY == 0) {
         reset()
-        drawSolution(po.last)
+        drawSolution(po.last.plateSolution)
     }
   }
 
@@ -103,7 +103,7 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
           iterate()
         }
         reset()
-        drawSolution(po.best)
+        drawSolution(po.best.plateSolution)
       }
     }
   val random = new Random()
