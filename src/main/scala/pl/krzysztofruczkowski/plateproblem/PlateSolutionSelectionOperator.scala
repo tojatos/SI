@@ -1,5 +1,5 @@
 package pl.krzysztofruczkowski.plateproblem
 
 trait PlateSolutionSelectionOperator {
-  def generateNewPopulation(population: List[PlateSolution]): List[PlateSolution]
+  def select(population: List[ConcretePlateSolution]): ConcretePlateSolution
 }

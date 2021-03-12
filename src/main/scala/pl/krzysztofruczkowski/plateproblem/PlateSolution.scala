@@ -6,7 +6,7 @@ import pl.krzysztofruczkowski.plateproblem.Direction.{Down, Left, Right, Up, isH
 import scala.util.Random
 
 case class PlateSolution(paths: List[Path]) {
-  def randomMutate(random: Random): PlateSolution = {
+  def randomMutate(implicit random: Random): PlateSolution = {
     val randomPathIndex = random.nextInt(paths.length)
     val randomPath: Path = paths(randomPathIndex)
     val segments = randomPath.segments
@@ -61,7 +61,8 @@ case class PlateSolution(paths: List[Path]) {
     PlateSolution(newPaths)
   }
   def cross(other: PlateSolution, random: Random): PlateSolution = {
-    val pathsToReplace = paths.length / 2
+//    val pathsToReplace = paths.length / 2
+    val pathsToReplace = random.between(0, paths.length)
     val takeFromOriginalAtIndex = random.shuffle(List.fill(pathsToReplace)(false) ::: List.fill(paths.length - pathsToReplace)(true))
     val newPaths = paths.indices.map(i => if(takeFromOriginalAtIndex(i)) paths(i) else other.paths(i)).toList
     PlateSolution(newPaths)

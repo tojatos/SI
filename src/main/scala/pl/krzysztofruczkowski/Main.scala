@@ -1,19 +1,23 @@
 package pl.krzysztofruczkowski
 
-import pl.krzysztofruczkowski.plateproblem.{Loader, PlateProblem}
-import pl.krzysztofruczkowski.ui.{SceneManager, Scenes}
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
+import pl.krzysztofruczkowski.plateproblem.{Const, GeneticPlateProblemOptimizer, Loader, PlateProblem, TournamentSelectionOperator}
 
-object Main extends JFXApp {
+import scala.util.Random
+
+object Main extends App {
   val filenames: Seq[String] = 0 to 3 map (x => s"zad$x.txt" )
   val problems: Seq[PlateProblem] = Loader.loadProblems(filenames)
-  stage = new PrimaryStage {
-        title = "Plate problem analyser"
+  implicit val random: Random = new Random()
+  val t1 = System.nanoTime()
+  println(s"Generating random population (${Const.GENERIC_OPTIMIZER_POPULATION_SIZE})")
+  val problem = problems(1)
+  val po = new GeneticPlateProblemOptimizer(problem, new TournamentSelectionOperator(random))
+  var duration = (System.nanoTime() - t1) / 1e9d
+  println(s"Generated in $duration")
+  while (!problem.isValid(po.getBest().plateSolution)) {
+      for (_ <- 1 to 1000) {
+        po.iterate()
+      }
   }
-//  val po = new RandomPlateProblemOptimizer(problems.head)
-//  for (_ <- 1 to 1000) {
-//    po.iterate()
-//  }
-  SceneManager.loadScene(Scenes.Main)
+  println(po.getBest())
 }

@@ -16,6 +16,11 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
 
   def countIntersections(allPoints: Seq[Point]): Int = allPoints.size - allPoints.toSet.size
 
+  def isValid(plateSolution: PlateSolution): Boolean = {
+    val allPoints = getAllPoints(plateSolution)
+    countIntersections(allPoints) == 0 && allPoints.count(isOutsideOfPlate) == 0
+  }
+
   def fitness(plateSolution: PlateSolution): Double = {
     val allPoints = getAllPoints(plateSolution)
     val k1 = countIntersections(allPoints)
@@ -38,7 +43,7 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
       }
       s = x
     })
-    println(s)
+//    println(s)
     s
   }
 }

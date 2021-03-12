@@ -4,7 +4,7 @@ import java.util.concurrent.Executors
 
 import pl.krzysztofruczkowski.plateproblem.Direction._
 import pl.krzysztofruczkowski._
-import pl.krzysztofruczkowski.plateproblem.{Const, PlateProblem, PlateSolution, RandomMutationPlateProblemOptimizer, Segment, StaticData}
+import pl.krzysztofruczkowski.plateproblem.{Const, GeneticPlateProblemOptimizer, PlateProblem, PlateSolution, RandomMutationPlateProblemOptimizer, Segment, StaticData, TournamentSelectionOperator}
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.control.Button
@@ -85,33 +85,66 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
   }
   reset()
 
-  val po = new RandomMutationPlateProblemOptimizer(selectedProblem)
+//  val po = new RandomMutationPlateProblemOptimizer(selectedProblem)
+//  Future {
+//    drawSolution(po.best.plateSolution)
+//  }
+//  def iterate(): Unit = {
+//    po.iterate()
+//    if(po.iteration % Const.PROBLEM_CONTROLLER_REDRAW_EVERY == 0) {
+//      reset()
+//      drawSolution(po.last.plateSolution)
+//    }
+//  }
+
+  val random = new Random()
+  val po = new GeneticPlateProblemOptimizer(selectedProblem, new TournamentSelectionOperator(random))
+//  var last = po.getBest()
+
   Future {
-    drawSolution(po.best.plateSolution)
+    drawSolution(po.getBest().plateSolution)
   }
   def iterate(): Unit = {
     po.iterate()
-    if(po.iteration % Const.PROBLEM_CONTROLLER_REDRAW_EVERY == 0) {
-        reset()
-        drawSolution(po.last.plateSolution)
-    }
+//    println(po.population.map(_.plateSolution))
+//    val best = po.getBest()
+//    if(last != best) {
+//      last = best
+//      drawSolution(best.plateSolution)
+//      println("!!!!!!!! " + best.fitness)
+//    }
   }
 
-  val iterAction  = () => {
+  val iterAction = () => {
       Future {
         for (_ <- 1 to Const.PROBLEM_CONTROLLER_NUMBER_OF_ITERATIONS) {
           iterate()
         }
         reset()
-        drawSolution(po.best.plateSolution)
+        drawSolution(po.getBest().plateSolution)
+        println("iteration done")
       }
     }
-  val random = new Random()
   val randAction = () => {
     Future {
       reset()
       drawSolution(selectedProblem.generateRandomSolution(random))
     }
   }
-    iterButton.onAction = _ => iterAction();
+
+  val infiniteIterAction = () => {
+    Future {
+//      while (!selectedProblem.isValid(po.getBest().plateSolution)) {
+      while(true) {
+        for (i <- 1 to 50) {
+          println(s"iter ${i}")
+          po.iterate()
+        }
+      reset()
+        println("drawing")
+        drawSolution(po.getBest().plateSolution)
+      }
+    }
+  }
+  iterButton.onAction = _ => infiniteIterAction()
 }
