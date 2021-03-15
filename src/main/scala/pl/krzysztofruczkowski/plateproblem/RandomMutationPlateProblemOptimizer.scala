@@ -14,7 +14,7 @@ class RandomMutationPlateProblemOptimizer(plateProblem: PlateProblem, seed: Long
   var last: ConcretePlateSolution = best
 
   println(s"Initial fitness: ${best.fitness}")
-  override def getBest = best
+  override def getBest() = best
 
   var iteration = 0
   override def iterate(): Unit = {

@@ -1,5 +1,7 @@
 package pl.krzysztofruczkowski.plateproblem
 
+import scala.util.Random
+
 object Const {
   val K1_WEIGHT = 700
   val K2_WEIGHT = 3
@@ -16,4 +18,6 @@ object Const {
 
   val PROBLEM_CONTROLLER_NUMBER_OF_ITERATIONS = 100
   val PROBLEM_CONTROLLER_REDRAW_EVERY = 200
+  val OPERATOR = new RouletteSelectionOperator(new Random())
+//  val OPERATOR = new TournamentSelectionOperator(new Random())
 }

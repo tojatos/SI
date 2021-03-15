@@ -98,7 +98,8 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
 //  }
 
   val random = new Random()
-  val po = new GeneticPlateProblemOptimizer(selectedProblem, new TournamentSelectionOperator(random))
+//  val op = new TournamentSelectionOperator(random)
+  val po = new GeneticPlateProblemOptimizer(selectedProblem, Const.OPERATOR)
 //  var last = po.getBest()
 
   Future {

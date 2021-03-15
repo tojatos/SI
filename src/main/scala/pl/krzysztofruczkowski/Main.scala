@@ -10,8 +10,8 @@ object Main extends App {
   implicit val random: Random = new Random()
   val t1 = System.nanoTime()
   println(s"Generating random population (${Const.GENERIC_OPTIMIZER_POPULATION_SIZE})")
-  val problem = problems(1)
-  val po = new GeneticPlateProblemOptimizer(problem, new TournamentSelectionOperator(random))
+  val problem = problems(3)
+  val po = new GeneticPlateProblemOptimizer(problem, Const.OPERATOR)
   var duration = (System.nanoTime() - t1) / 1e9d
   println(s"Generated in $duration")
   while (!problem.isValid(po.getBest().plateSolution)) {
