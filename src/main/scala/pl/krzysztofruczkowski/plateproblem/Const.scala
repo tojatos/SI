@@ -17,7 +17,7 @@ object Const {
   val RANDOM_PLATE_PO_RESET_EVERY = 200
 
   val PROBLEM_CONTROLLER_NUMBER_OF_ITERATIONS = 100
-  val PROBLEM_CONTROLLER_REDRAW_EVERY = 200
+  val PROBLEM_CONTROLLER_REDRAW_EVERY = 5
   val OPERATOR = new RouletteSelectionOperator(new Random())
 //  val OPERATOR = new TournamentSelectionOperator(new Random())
 

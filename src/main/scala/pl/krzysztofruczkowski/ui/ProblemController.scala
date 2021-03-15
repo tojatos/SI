@@ -137,7 +137,7 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
     Future {
 //      while (!selectedProblem.isValid(po.getBest().plateSolution)) {
       while(true) {
-        for (i <- 1 to 50) {
+        for (i <- 1 to Const.PROBLEM_CONTROLLER_REDRAW_EVERY) {
           println(s"iter ${i}")
           po.iterate()
         }
