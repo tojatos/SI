@@ -16,7 +16,8 @@ case class PlateSolution(paths: List[Path]) {
     val segment = segments(randomSegmentIndex)
     val segmentAfter = if (randomSegmentIndex == segments.length-1) None else Some(segments(randomSegmentIndex+1))
     val forward = random.nextBoolean()
-    val forwardM = if(forward) 1 else -1
+    val multiplier = random.between(Const.MUTATION_MULTIPLIER_MIN, Const.MUTATION_MULTIPLIER_MAX + 1)
+    val forwardM = if(forward) multiplier else -multiplier
 
     val (dir1, dir2) = if(isHorizontal(segment.direction)) (Down, Up) else (Left, Right)
     val sb = segmentBefore.getOrElse(plateproblem.Segment(if(forward) dir1 else dir2, 0))

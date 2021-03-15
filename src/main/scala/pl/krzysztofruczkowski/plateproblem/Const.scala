@@ -20,4 +20,7 @@ object Const {
   val PROBLEM_CONTROLLER_REDRAW_EVERY = 200
   val OPERATOR = new RouletteSelectionOperator(new Random())
 //  val OPERATOR = new TournamentSelectionOperator(new Random())
+
+  val MUTATION_MULTIPLIER_MIN = 1
+  val MUTATION_MULTIPLIER_MAX = 10
 }
