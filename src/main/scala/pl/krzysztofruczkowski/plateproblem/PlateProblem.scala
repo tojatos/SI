@@ -43,7 +43,6 @@ case class PlateProblem(width: Int, height: Int, pairs: List[(Point, Point)])
       }
       s = x
     })
-//    println(s)
     s
   }
 }

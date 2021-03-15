@@ -1,6 +1,7 @@
 package pl.krzysztofruczkowski.plateproblem
 
 import scala.util.Random
+import scala.collection.parallel.CollectionConverters._
 
 class GeneticPlateProblemOptimizer(plateProblem: PlateProblem
                                    , selectionOperator: PlateSolutionSelectionOperator
@@ -8,11 +9,11 @@ class GeneticPlateProblemOptimizer(plateProblem: PlateProblem
   implicit val random: Random = new Random(seed)
   println(s"Used seed: $seed")
 
-  var population: List[ConcretePlateSolution] = (1 to Const.GENERIC_OPTIMIZER_POPULATION_SIZE) map (_ => {
+  var population: List[ConcretePlateSolution] = (1 to Const.GENERIC_OPTIMIZER_POPULATION_SIZE).par.map (_ => {
     val solution = plateProblem.generateRandomSolution(random)
     val fitness = plateProblem.fitness(solution)
     ConcretePlateSolution(solution, fitness)
-  }) toList
+  }).toList
   var best: ConcretePlateSolution = population.maxBy(x => x.fitness)
 
   override def getBest() = best
