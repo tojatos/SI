@@ -1,10 +1,9 @@
 package pl.krzysztofruczkowski.ui
 
 import java.util.concurrent.Executors
-
 import pl.krzysztofruczkowski.plateproblem.Direction._
 import pl.krzysztofruczkowski._
-import pl.krzysztofruczkowski.plateproblem.{Const, GeneticPlateProblemOptimizer, PlateProblem, PlateSolution, RandomMutationPlateProblemOptimizer, Segment, StaticData, TournamentSelectionOperator}
+import pl.krzysztofruczkowski.plateproblem.{Const, GeneticPlateProblemOptimizer, GeneticPlateProblemParameters, PlateProblem, PlateSolution, RandomMutationPlateProblemOptimizer, Segment, StaticData, TournamentSelectionOperator}
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.control.Button
@@ -97,9 +96,9 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
 //    }
 //  }
 
-  val random = new Random()
+  implicit val random: Random = new Random()
 //  val op = new TournamentSelectionOperator(random)
-  val po = new GeneticPlateProblemOptimizer(selectedProblem, Const.OPERATOR)
+  val po = new GeneticPlateProblemOptimizer(selectedProblem, GeneticPlateProblemParameters())
 //  var last = po.getBest()
 
   Future {

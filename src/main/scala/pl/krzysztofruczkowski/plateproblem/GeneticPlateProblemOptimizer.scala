@@ -3,12 +3,11 @@ package pl.krzysztofruczkowski.plateproblem
 import scala.util.Random
 import scala.collection.parallel.CollectionConverters._
 
-class GeneticPlateProblemOptimizer(plateProblem: PlateProblem
-                                   , selectionOperator: PlateSolutionSelectionOperator
-                                   , seed: Long = new Random().nextLong()) extends PlateProblemOptimizer {
-  implicit val random: Random = new Random(seed)
-  println(s"Used seed: $seed")
+class GeneticPlateProblemOptimizer(plateProblem: PlateProblem,
+                                   geneticPlateProblemParameters: GeneticPlateProblemParameters,
+                                   )(implicit random: Random) extends PlateProblemOptimizer {
 
+  val selectionOperator = geneticPlateProblemParameters.operator
   var population: List[ConcretePlateSolution] = (1 to Const.GENERIC_OPTIMIZER_POPULATION_SIZE).par.map (_ => {
     val solution = plateProblem.generateRandomSolution(random)
     val fitness = plateProblem.fitness(solution)
@@ -23,12 +22,12 @@ class GeneticPlateProblemOptimizer(plateProblem: PlateProblem
     val newPopulation = getBest() :: population.indices.drop(1).map(_ => {
       val p1 = selectionOperator.select(population)
       val p2 = selectionOperator.select(population)
-      var o1 = if (random.between(0f, 1f) <= Const.GENERIC_OPTIMIZER_CROSS_PROBABILITY) {
+      var o1 = if (random.between(0f, 1f) <= geneticPlateProblemParameters.crossProbabilitiy) {
         val crossedSolution = p1.plateSolution.cross(p2.plateSolution, random)
         val crossedFitness = plateProblem.fitness(crossedSolution)
         ConcretePlateSolution(crossedSolution, crossedFitness)
       } else p1
-      if (random.between(0f, 1f) <= Const.GENERIC_OPTIMIZER_MUTATION_PROBABILITY) {
+      if (random.between(0f, 1f) <= geneticPlateProblemParameters.mutationProbabilitiy) {
         val mutatedSolution = o1.plateSolution.randomMutate(random)
         val crossedFitness = plateProblem.fitness(mutatedSolution)
 

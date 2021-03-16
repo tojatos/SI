@@ -2,7 +2,7 @@ package pl.krzysztofruczkowski.plateproblem
 
 import scala.util.Random
 
-class TournamentSelectionOperator(random: Random) extends PlateSolutionSelectionOperator {
+class TournamentSelectionOperator(n: Int)(implicit random: Random) extends PlateSolutionSelectionOperator {
   def select(population: List[ConcretePlateSolution]): ConcretePlateSolution =
-    random.shuffle(population).take(Const.TOURNAMENT_SELECTION_N).maxBy(_.fitness)
+    random.shuffle(population).take(n).maxBy(_.fitness)
 }
