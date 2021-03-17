@@ -1,0 +1,87 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[MeX]{polski}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb}
+\usepackage{minted}
+\usepackage{titling}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref} % clickable table of contents and urls
+\usepackage{float}
+\usepackage{enumerate} % custom enumeration types
+\usepackage[labelfont=bf]{caption} % bold captions
+
+ % center headings
+\usepackage{sectsty}
+\allsectionsfont{\centering}
+
+\setlength\parindent{0pt}
+\renewcommand*{\thefootnote}{(\arabic{footnote})} % puts footnote in brackets
+
+% minted color box
+\usepackage[breakable]{tcolorbox}
+
+\BeforeBeginEnvironment{minted}{\begin{tcolorbox}[breakable]}
+\AfterEndEnvironment{minted}{\end{tcolorbox}}
+
+% Create a new environment for breaking code listings across pages.
+\usepackage{caption}
+\newenvironment{longlisting}{\captionsetup{type=listing}}{}
+
+% break long urls (https://tex.stackexchange.com/a/325037)
+\usepackage{etoolbox}
+\appto\UrlBreaks{\do\-}
+
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+\newcommand{\nt}[1]{\mkern1mu\overline{\mkern-1mu#1\mkern-1mu}\mkern1mu}
+\newcommand{\image}[2] {
+    \begin{figure}[H]
+        \begin{center}
+            \includegraphics[width=0.75\textwidth]{#1}
+        \end{center}
+        \caption{#2}
+        \label{#1}
+    \end{figure}
+}
+
+% disable numbering
+\setcounter{secnumdepth}{0}
+
+\author{Krzysztof Ruczkowski}
+\title{Sztuczna Inteligencja i Inżynieria Wiedzy}
+\subtitle{Algorytmy Genetyczne - sprawozdanie}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Badania wpływu parametrów}
+Każde badanie jest uruchamiane 10 razy.
+5000 iteracji.
+\subsection{Rozmiar populacji}
+\subsection{Liczba pokoleń}
+\subsection{Rozmiar turnieju}
+\subsection{Operatorów selekcji}
+\subsection{Prawdopodobieństwo krzyżowania}
+\subsection{Prawdopodobieństwo mutacji}
+\section{Porównanie algorytmu genetycznego z metodami "naiwnymi"}
+\subsection{Metoda losowa}
+\subsection{Metoda losowych mutacji}
+
+\section{Podsumowanie}
+
+Dlatego prezentacje powinny być \textbf{odpowiednio krótkie}, inaczej mogą powodować znużenie.
+
+\end{document}
