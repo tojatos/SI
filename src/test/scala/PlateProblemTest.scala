@@ -51,8 +51,30 @@ class PlateProblemTest extends FunSuite {
     val correctPath = Path(List(Segment(Left, 2), Segment(Down, 5), Segment(Right, 3)))
     val testPath1 = Path(List(Segment(Left, 2), Segment(Left, 0), Segment(Down, 5), Segment(Right, 3)))
     val testPath2 = Path(List(Segment(Left, 1), Segment(Up, 0), Segment(Left, 1), Segment(Up, 7), Segment(Left, 0), Segment(Down, 12), Segment(Right, 3)))
+    val testPath3 = Path(List(Segment(Left, 2), Segment(Left, 1), Segment(Right, 5), Segment(Right, 0), Segment(Left, 5), Segment(Right, 1), Segment(Down, 5), Segment(Right, 3)))
     assert(correctPath == correctPath.fixed())
     assert(correctPath == testPath1.fixed())
     assert(correctPath == testPath2.fixed())
+    assert(correctPath == testPath3.fixed())
+  }
+
+  test("Mutation works") {
+//    Path(List(Segment(Left, 2), Segment(Down, 5), Segment(Right, 3)))
+    val p1 = Path(List(Segment(Down, 1), Segment(Left, 3), Segment(Down, 3)))
+    val s1 = Path(List(Segment(Down, 2), Segment(Left, 3), Segment(Down, 2)))
+    assert(p1.mutate(1, forward = false, 1) == s1)
+
+    val p2 = Path(List(Segment(Down, 4)))
+    val s2a = Path(List(Segment(Right, 1), Segment(Down, 4), Segment(Left, 1)))
+    val s2b = Path(List(Segment(Right, 3), Segment(Down, 4), Segment(Left, 3)))
+    val s2c = Path(List(Segment(Left, 1), Segment(Down, 4), Segment(Right, 1)))
+    assert(p2.mutate(0, forward = true, 1) == s2a)
+    assert(p2.mutate(0, forward = true, 3) == s2b)
+    assert(p2.mutate(0, forward = false, 1) == s2c)
+
+    val p3 = Path(List(Segment(Right, 1), Segment(Down, 4), Segment(Left, 1)))
+    val s3 = Path(List(Segment(Down, 4)))
+    assert(p3.mutate(1, forward = false, 1) == s3)
+
   }
 }

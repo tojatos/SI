@@ -8,33 +8,24 @@ import scala.util.Random
 case class Path(segments: List[Segment]) {
   def mutate(implicit random: Random): Path = {
     val randomSegmentIndex = random.nextInt(segments.length)
-
-    val segmentBefore = if (randomSegmentIndex == 0) None else Some(segments(randomSegmentIndex-1))
-    val segment = segments(randomSegmentIndex)
-    val segmentAfter = if (randomSegmentIndex == segments.length-1) None else Some(segments(randomSegmentIndex+1))
     val forward = random.nextBoolean()
     val multiplier = random.between(Const.MUTATION_MULTIPLIER_MIN, Const.MUTATION_MULTIPLIER_MAX + 1)
+    mutate(randomSegmentIndex, forward, multiplier)
+  }
+
+  def mutate(segmentIndex: Int, forward: Boolean, multiplier: Int): Path = {
+    val segment = segments(segmentIndex)
     val forwardM = if(forward) multiplier else -multiplier
 
-    val (dir1, dir2) = if(isHorizontal(segment.direction)) (Down, Up) else (Left, Right)
-    val sb = segmentBefore.getOrElse(plateproblem.Segment(if(forward) dir1 else dir2, 0))
-    val sa = segmentAfter.getOrElse(plateproblem.Segment(if(forward) dir2 else dir1, 0))
-    val newSb = if(sb.direction == dir2) {
-      plateproblem.Segment(dir2, sb.length - 1 * forwardM)
-    } else {
-      plateproblem.Segment(dir1, sb.length + 1 * forwardM)
-    }
+    val dir = if(isHorizontal(segment.direction)) Up else Right
+    val sa = plateproblem.Segment(dir, forwardM)
+    val sb = plateproblem.Segment(dir, -forwardM)
 
-    val newSa = if(sa.direction == dir1) {
-      plateproblem.Segment(dir1, sa.length - 1 * forwardM)
-    } else {
-      plateproblem.Segment(dir2, sa.length + 1 * forwardM)
-    }
-    // replace segments and filter empty
+    // insert segments
     val newSegments: List[Segment] =
-      segments.take(randomSegmentIndex - 1) :::
-        newSb :: segment :: newSa ::
-        segments.slice(randomSegmentIndex+2, segments.length)
+      segments.take(segmentIndex) :::
+        sa :: segment :: sb ::
+        segments.slice(segmentIndex+1, segments.length)
 
     Path(newSegments).fixed()
   }
@@ -60,7 +51,11 @@ case class Path(segments: List[Segment]) {
     // swap negative values after reduction
     val newSegmentsFixed = segmentsReduced.map(s => if (s.length > 0) s else plateproblem.Segment(Direction.opposing(s.direction), -s.length))
 
-    Path(newSegmentsFixed)
+    // run again if not reduced
+    if(newSegmentsFixed.exists(_.length == 0))
+      Path(newSegmentsFixed).fixed()
+    else
+      Path(newSegmentsFixed)
   }
 
 }
