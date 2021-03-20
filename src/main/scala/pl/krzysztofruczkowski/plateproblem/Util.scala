@@ -1,9 +1,16 @@
 package pl.krzysztofruczkowski.plateproblem
 
 import pl.krzysztofruczkowski.plateproblem.Direction._
+
 import Numeric.Implicits._
+import scala.util.Random
 
 object Util {
+  def splitNumberInThree(number: Int)(implicit random: Random) : (Int, Int, Int) = {
+    val numbers = (1 to 2).map(_ => random.between(0, number + 1)).sorted
+    (numbers(0), numbers(1) - numbers(0), number - numbers(1))
+  }
+
   def getTrivialPath(startPoint: Point, endPoint: Point): Path = {
     val xDiff = endPoint.x - startPoint.x
     val yDiff = endPoint.y - startPoint.y

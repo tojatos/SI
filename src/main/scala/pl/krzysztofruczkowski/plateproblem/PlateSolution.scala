@@ -7,7 +7,7 @@ case class PlateSolution(paths: List[Path]) {
     val randomPathIndex = random.nextInt(paths.length)
     val randomPath: Path = paths(randomPathIndex)
 
-    val mutatedPath = randomPath.mutate(random)
+    val mutatedPath = if(random.nextBoolean()) randomPath.mutate(random) else randomPath.mutate_b(random)
     val newPaths = paths.updated(randomPathIndex, mutatedPath)
 
     PlateSolution(newPaths)

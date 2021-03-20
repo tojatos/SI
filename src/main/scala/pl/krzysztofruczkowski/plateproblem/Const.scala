@@ -9,16 +9,16 @@ object Const {
   val K5_WEIGHT = 1500
 
   val GENERIC_OPTIMIZER_POPULATION_SIZE = 1000
-  val GENERIC_OPTIMIZER_CROSS_PROBABILITY = 0.7
-  val GENERIC_OPTIMIZER_MUTATION_PROBABILITY = 0.04
+  val GENERIC_OPTIMIZER_CROSS_PROBABILITY = 0.1
+  val GENERIC_OPTIMIZER_MUTATION_PROBABILITY = 0.8
 
   val TOURNAMENT_SELECTION_N = 3
 
-  val OPERATOR = new RouletteSelectionOperator(new Random())
-//  val OPERATOR = new TournamentSelectionOperator(new Random())
+//  val OPERATOR = new RouletteSelectionOperator(new Random())
+  val OPERATOR = new TournamentSelectionOperator(TOURNAMENT_SELECTION_N)(new Random())
 
   val MUTATION_MULTIPLIER_MIN = 1
-  val MUTATION_MULTIPLIER_MAX = 10
+  val MUTATION_MULTIPLIER_MAX = 15
 
   val RANDOM_PLATE_PO_RESET_EVERY = 200
 

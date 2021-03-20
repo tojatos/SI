@@ -4,8 +4,9 @@ import pl.krzysztofruczkowski.plateproblem.Direction.{Right, Up}
 import pl.krzysztofruczkowski.plateproblem._
 
 import scala.language.postfixOps
-
 import plateproblem.Direction._
+
+import scala.util.Random
 
 class PlateProblemTest extends FunSuite {
   val problem: PlateProblem = plateproblem.PlateProblem(
@@ -59,7 +60,6 @@ class PlateProblemTest extends FunSuite {
   }
 
   test("Mutation works") {
-//    Path(List(Segment(Left, 2), Segment(Down, 5), Segment(Right, 3)))
     val p1 = Path(List(Segment(Down, 1), Segment(Left, 3), Segment(Down, 3)))
     val s1 = Path(List(Segment(Down, 2), Segment(Left, 3), Segment(Down, 2)))
     assert(p1.mutate(1, forward = false, 1) == s1)
@@ -76,5 +76,37 @@ class PlateProblemTest extends FunSuite {
     val s3 = Path(List(Segment(Down, 4)))
     assert(p3.mutate(1, forward = false, 1) == s3)
 
+  }
+
+  test("Split in three works") {
+    implicit val random: Random = new Random(123)
+    for (n <- 1 to 10) {
+      val splittedList = (1 to 100).map(_ => Util.splitNumberInThree(n))
+//      println(n)
+//      println(splittedList)
+      assert(splittedList.forall(p => p._1 + p._2 + p._3 == n))
+    }
+  }
+
+  test("Mutation b works") {
+    val p1 = Path(List(Segment(Down, 1), Segment(Left, 3), Segment(Down, 3)))
+    val s1 = Path(List(Segment(Down, 2), Segment(Left, 3), Segment(Down, 2)))
+    assert(p1.mutate_b(1, (3, 0, 0), 0, forward = false, 1) == s1)
+    assert(p1.mutate_b(1, (0, 3, 0), 1, forward = false, 1) == s1)
+    assert(p1.mutate_b(1, (0, 0, 3), 2, forward = false, 1) == s1)
+
+    val p2 = Path(List(Segment(Right, 1), Segment(Down, 4), Segment(Left, 1)))
+    val s2 = Path(List(Segment(Down, 4)))
+    assert(p2.mutate_b(1, (4,0,0), 0, forward = false, 1) == s2)
+
+    val p3 = Path(List(Segment(Left, 2), Segment(Down, 5), Segment(Right, 3)))
+    val s3a = Path(List(Segment(Left, 2), Segment(Down, 3), Segment(Right, 1), Segment(Down, 2), Segment(Right, 2)))
+    val s3b = Path(List(Segment(Left, 2), Segment(Down, 2), Segment(Right, 1), Segment(Down, 1), Segment(Left, 1), Segment(Down, 2), Segment(Right, 3)))
+    val s3c = Path(List(Segment(Left, 1), Segment(Down, 1), Segment(Left, 1), Segment(Down, 4), Segment(Right, 3)))
+    val s3d = Path(List(Segment(Left, 1), Segment(Down, 2), Segment(Left, 1), Segment(Down, 3), Segment(Right, 3)))
+    assert(p3.mutate_b(1, (0,3,2), 2, forward = true, 1) == s3a)
+    assert(p3.mutate_b(1, (2,1,2), 1, forward = true, 1) == s3b)
+    assert(p3.mutate_b(1, (0,1,4), 1, forward = true, 1) == s3c)
+    assert(p3.mutate_b(1, (2,0,3), 0, forward = true, 1) == s3d)
   }
 }
