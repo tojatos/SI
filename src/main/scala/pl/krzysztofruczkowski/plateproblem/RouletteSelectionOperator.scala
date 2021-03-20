@@ -10,4 +10,6 @@ class RouletteSelectionOperator(random: Random) extends PlateSolutionSelectionOp
     val index = sumList.indexWhere(x => x > rand) - 1
     population(index)
   }
+
+  override def name = "Roulette"
 }
