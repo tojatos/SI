@@ -5,6 +5,8 @@ import pl.krzysztofruczkowski.plateproblem._
 
 import scala.language.postfixOps
 
+import plateproblem.Direction._
+
 class PlateProblemTest extends FunSuite {
   val problem: PlateProblem = plateproblem.PlateProblem(
     6,6,
@@ -43,5 +45,14 @@ class PlateProblemTest extends FunSuite {
   }
   test("Trivial solution works") {
     assert(problem.getTrivialSolution === solution)
+  }
+
+  test("Path fixing works") {
+    val correctPath = Path(List(Segment(Left, 2), Segment(Down, 5), Segment(Right, 3)))
+    val testPath1 = Path(List(Segment(Left, 2), Segment(Left, 0), Segment(Down, 5), Segment(Right, 3)))
+    val testPath2 = Path(List(Segment(Left, 1), Segment(Up, 0), Segment(Left, 1), Segment(Up, 7), Segment(Left, 0), Segment(Down, 12), Segment(Right, 3)))
+    assert(correctPath == correctPath.fixed())
+    assert(correctPath == testPath1.fixed())
+    assert(correctPath == testPath2.fixed())
   }
 }

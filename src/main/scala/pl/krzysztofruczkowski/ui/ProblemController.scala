@@ -1,15 +1,13 @@
 package pl.krzysztofruczkowski.ui
 
-import java.util.concurrent.Executors
 import pl.krzysztofruczkowski.plateproblem.Direction._
-import pl.krzysztofruczkowski._
-import pl.krzysztofruczkowski.plateproblem.{Const, GeneticPlateProblemOptimizer, GeneticPlateProblemParameters, PlateProblem, PlateSolution, RandomMutationPlateProblemOptimizer, Segment, StaticData, TournamentSelectionOperator}
-import scalafx.beans.property.ObjectProperty
+import pl.krzysztofruczkowski.plateproblem._
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.control.Button
 import scalafx.scene.paint.Color._
 import scalafxml.core.macros.sfxml
 
+import java.util.concurrent.Executors
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 import scala.util.Random
 
@@ -98,27 +96,17 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
 
   implicit val random: Random = new Random()
 //  val op = new TournamentSelectionOperator(random)
-  val po = new GeneticPlateProblemOptimizer(selectedProblem, GeneticPlateProblemParameters())
+  lazy val po = new GeneticPlateProblemOptimizer(selectedProblem, GeneticPlateProblemParameters())
 //  var last = po.getBest()
 
   Future {
     drawSolution(po.getBest().plateSolution)
   }
-  def iterate(): Unit = {
-    po.iterate()
-//    println(po.population.map(_.plateSolution))
-//    val best = po.getBest()
-//    if(last != best) {
-//      last = best
-//      drawSolution(best.plateSolution)
-//      println("!!!!!!!! " + best.fitness)
-//    }
-  }
 
   val iterAction = () => {
       Future {
         for (_ <- 1 to Const.PROBLEM_CONTROLLER_NUMBER_OF_ITERATIONS) {
-          iterate()
+          po.iterate()
         }
         reset()
         drawSolution(po.getBest().plateSolution)
@@ -135,14 +123,13 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
   val infiniteIterAction = () => {
     Future {
 //      while (!selectedProblem.isValid(po.getBest().plateSolution)) {
-      while(true) {
-        for (i <- 1 to Const.PROBLEM_CONTROLLER_REDRAW_EVERY) {
-          println(s"iter ${i}")
-          po.iterate()
+      for(i <- LazyList.from(1)) {
+        println(s"Gen $i")
+        po.iterate()
+        if(i % Const.PROBLEM_CONTROLLER_REDRAW_EVERY == 0) {
+          reset()
+          drawSolution(po.getBest().plateSolution)
         }
-      reset()
-        println("drawing")
-        drawSolution(po.getBest().plateSolution)
       }
     }
   }

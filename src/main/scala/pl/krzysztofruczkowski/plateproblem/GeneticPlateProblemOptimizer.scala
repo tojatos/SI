@@ -19,10 +19,10 @@ class GeneticPlateProblemOptimizer(plateProblem: PlateProblem,
   println(s"Initial fitness: ${getBest().fitness}")
 
   override def iterate(): Unit = {
-    val newPopulation = getBest() :: population.indices.drop(1).map(_ => {
+    val newPopulation = getBest() :: population.indices.drop(1).par.map(_ => {
       val p1 = selectionOperator.select(population)
-      val p2 = selectionOperator.select(population)
       var o1 = if (random.between(0f, 1f) <= geneticPlateProblemParameters.crossProbabilitiy) {
+        val p2 = selectionOperator.select(population)
         val crossedSolution = p1.plateSolution.cross(p2.plateSolution, random)
         val crossedFitness = plateProblem.fitness(crossedSolution)
         ConcretePlateSolution(crossedSolution, crossedFitness)
