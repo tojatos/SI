@@ -2,7 +2,7 @@ package pl.krzysztofruczkowski.plateproblem
 
 import scala.util.Random
 
-class RouletteSelectionOperator(random: Random) extends PlateSolutionSelectionOperator {
+class RouletteSelectionOperator(implicit random: Random) extends PlateSolutionSelectionOperator {
   def select(population: List[ConcretePlateSolution]): ConcretePlateSolution = {
     val reciprocalSum = population.map(-1 / _.fitness).sum
     val sumList = population.scanLeft(0d)((x, y) => x + ((-1/y.fitness) / reciprocalSum))

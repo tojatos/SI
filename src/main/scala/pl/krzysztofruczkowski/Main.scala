@@ -24,6 +24,9 @@ object Main extends App {
   val testTournamentSizes = List(1, 2, 3, 5, 10, 20, 100)
   val testTournamentParameters = testTournamentSizes.map(x => GeneticPlateProblemParameters(operator = new TournamentSelectionOperator(x)))
 
+  val testOperators = List(new TournamentSelectionOperator(Const.TOURNAMENT_SELECTION_N), new RouletteSelectionOperator())
+  val testOperatorsParameters = testOperators.map(x => GeneticPlateProblemParameters(operator = x))
+
   def get_filename(problemString: String, p: GeneticPlateProblemParameters): String =
     "research_results\\" + List(problemString, p.populationSize, p.operator.name, p.crossProbabilitiy, p.mutationProbabilitiy).mkString("_") + ".txt"
 
@@ -77,5 +80,5 @@ object Main extends App {
     }
   }
 //  researchGenerations()
-  research(testTournamentParameters)
+  research(testOperatorsParameters)
 }
