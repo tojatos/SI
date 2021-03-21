@@ -30,6 +30,9 @@ object Main extends App {
   val testCrossProbabilities = List(0.01, 0.05, 0.1, 0.2, 0.3, 0.5, 0.8, 0.9, 1)
   val testCrossProbabilitiesParameters = testCrossProbabilities.map(x => GeneticPlateProblemParameters(crossProbabilitiy = x))
 
+  val testMutationProbabilities = List(0.01, 0.05, 0.1, 0.2, 0.3, 0.5, 0.8, 0.9, 1)
+  val testMutationProbabilitiesParameters = testMutationProbabilities.map(x => GeneticPlateProblemParameters(mutationProbabilitiy = x))
+
   def get_filename(problemString: String, p: GeneticPlateProblemParameters): String =
     "research_results\\" + List(problemString, p.populationSize, p.operator.name, p.crossProbabilitiy, p.mutationProbabilitiy).mkString("_") + ".txt"
 
@@ -83,5 +86,5 @@ object Main extends App {
     }
   }
 //  researchGenerations()
-  research(testCrossProbabilitiesParameters)
+  research(testMutationProbabilitiesParameters)
 }
