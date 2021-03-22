@@ -32,7 +32,30 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
 
   val gc: GraphicsContext = plateCanvas.graphicsContext2D
 
-  def drawProblem(): Unit = {
+  def reset(): Unit = {
+    drawProblem(selectedProblem)
+  }
+  implicit val random: Random = new Random()
+  lazy val po = new GeneticPlateProblemOptimizer(selectedProblem, GeneticPlateProblemParameters())
+  def drawBestSolution(): Unit = {
+    val filenames: Seq[String] = 0 to 3 map (x => s"zad$x.txt" )
+    val problems: Seq[PlateProblem] = Loader.loadProblems(filenames).drop(1)
+    val index = problems.indexOf(selectedProblem)
+    val bestSolutions = List(
+      PlateSolution(List(Path(List(Segment(Down,2), Segment(Right,7), Segment(Up,2))), Path(List(Segment(Up,1), Segment(Right,4), Segment(Down,3))), Path(List(Segment(Left,3), Segment(Up,9), Segment(Right,4))), Path(List(Segment(Down,1), Segment(Right,9), Segment(Up,11), Segment(Left,4))), Path(List(Segment(Up,2))), Path(List(Segment(Up,1), Segment(Right,6), Segment(Down,1))), Path(List(Segment(Up,1), Segment(Left,8), Segment(Up,12), Segment(Right,8))), Path(List(Segment(Down,4), Segment(Right,3))))),
+      PlateSolution(List(Path(List(Segment(Up,7), Segment(Right,6), Segment(Down,14), Segment(Right,3), Segment(Up,14), Segment(Right,4), Segment(Down,14), Segment(Right,6), Segment(Up,7))), Path(List(Segment(Up,16))), Path(List(Segment(Up,15))), Path(List(Segment(Up,16))), Path(List(Segment(Up,15))))),
+      PlateSolution(List(Path(List(Segment(Up,1), Segment(Right,13), Segment(Down,1), Segment(Right,4))), Path(List(Segment(Down,1), Segment(Right,19), Segment(Up,1))), Path(List(Segment(Left,1), Segment(Down,4), Segment(Right,19), Segment(Up,4), Segment(Left,1))), Path(List(Segment(Right,8), Segment(Up,1), Segment(Right,11), Segment(Down,1))), Path(List(Segment(Down,1), Segment(Right,14), Segment(Up,1), Segment(Right,3))), Path(List(Segment(Right,5), Segment(Up,1), Segment(Right,14), Segment(Down,1))), Path(List(Segment(Down,1), Segment(Right,9), Segment(Up,1), Segment(Right,8))), Path(List(Segment(Up,1), Segment(Right,19), Segment(Down,1))), Path(List(Segment(Right,17))), Path(List(Segment(Up,1), Segment(Right,19), Segment(Down,1))))),
+    )
+
+    drawSolution(bestSolutions(index))
+  }
+  Future {
+    reset()
+    drawSolution(po.getBest().plateSolution)
+//    drawBestSolution()
+  }
+
+  def drawProblem(problem: PlateProblem): Unit = {
     // fill with green
     gc.fill = Green
     gc.fillRect(0, 0, plateCanvas.width.value, plateCanvas.height.value)
@@ -44,7 +67,7 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
       gc.strokeOval(t._1, t._2, baseCircleUnit, baseCircleUnit)
     )
 
-    selectedProblem.pairs zip infiniteColors foreach(x => {
+    problem.pairs zip infiniteColors foreach(x => {
       val (points, color) = x
       val (p1, p2) = (points._1.toTuple, points._2.toTuple)
       val cp1 = pointToCanvasPointMap(p1)
@@ -77,31 +100,6 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
       gc.strokePath()
     }
   }
-  def reset(): Unit = {
-    drawProblem()
-  }
-  reset()
-
-//  val po = new RandomMutationPlateProblemOptimizer(selectedProblem)
-//  Future {
-//    drawSolution(po.best.plateSolution)
-//  }
-//  def iterate(): Unit = {
-//    po.iterate()
-//    if(po.iteration % Const.PROBLEM_CONTROLLER_REDRAW_EVERY == 0) {
-//      reset()
-//      drawSolution(po.last.plateSolution)
-//    }
-//  }
-
-  implicit val random: Random = new Random()
-//  val op = new TournamentSelectionOperator(random)
-  lazy val po = new GeneticPlateProblemOptimizer(selectedProblem, GeneticPlateProblemParameters())
-//  var last = po.getBest()
-
-  Future {
-    drawSolution(po.getBest().plateSolution)
-  }
 
   val iterAction = () => {
       Future {
@@ -133,5 +131,7 @@ class ProblemController(val plateCanvas: Canvas, val iterButton: Button) {
       }
     }
   }
+
+
   iterButton.onAction = _ => infiniteIterAction()
 }

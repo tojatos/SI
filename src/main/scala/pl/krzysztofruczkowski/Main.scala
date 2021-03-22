@@ -37,17 +37,19 @@ object Main extends App {
     "research_results\\" + List(problemString, p.populationSize, p.operator.name, p.crossProbabilitiy, p.mutationProbabilitiy).mkString("_") + ".txt"
 
   def researchParameters(problemWithName: (PlateProblem,String), p: GeneticPlateProblemParameters): Unit = {
-    val bestFitnessList = (1 to Const.RESEARCH_TIMES).par.map { _ =>
+    val bestList = (1 to Const.RESEARCH_TIMES).par.map { _ =>
       lazy val po = new GeneticPlateProblemOptimizer(problemWithName._1, p)
       for (_ <- 1 to Const.RESEARCH_ITERATIONS) {
         po.iterate()
       }
-      po.best.fitness
+      po.best
     }.toList
+    val bestFitnessList = bestList.map(_.fitness)
     val resultString = List(bestFitnessList.max, bestFitnessList.min, Util.mean(bestFitnessList), Util.stdDev(bestFitnessList)).mkString(" ")
     val filename = get_filename(problemWithName._2, p)
     File(filename).writeAll(resultString)
     println(filename, resultString)
+    println(bestList.maxBy(_.fitness).plateSolution)
   }
 
   def researchGenerations() {
@@ -85,6 +87,40 @@ object Main extends App {
       }
     }
   }
+
+  def researchRandomOptimizer(problemWithName: (PlateProblem,String)): Unit = {
+    lazy val po = new RandomPlateProblemOptimizer(problemWithName._1)
+    val bestList = (1 to Const.RESEARCH_ITERATIONS * Const.RESEARCH_TIMES).map { _ =>
+      po.iterate()
+      po.best
+    }.toList
+    val bestFitnessList = bestList.map(_.fitness)
+    val resultString = List(bestFitnessList.max, bestFitnessList.min, Util.mean(bestFitnessList), Util.stdDev(bestFitnessList)).mkString(" ")
+    val filename = s"research_results\\${problemWithName._2}_random.txt"
+
+    File(filename).writeAll(resultString)
+    println(filename, resultString)
+    println(bestList.maxBy(_.fitness).plateSolution)
+  }
+
+  def researchRandomMutationOptimizer(problemWithName: (PlateProblem,String)): Unit = {
+    val bestList = (1 to 30).par.map { _ =>
+      lazy val po = new RandomMutationPlateProblemOptimizer(problemWithName._1)
+      for (_ <- 1 to Const.RESEARCH_ITERATIONS) {
+        po.iterate()
+      }
+      po.best
+    }.toList
+    val bestFitnessList = bestList.map(_.fitness)
+    val resultString = List(bestFitnessList.max, bestFitnessList.min, Util.mean(bestFitnessList), Util.stdDev(bestFitnessList)).mkString(" ")
+    val filename = s"research_results\\${problemWithName._2}_random_mutation.txt"
+
+    File(filename).writeAll(resultString)
+    println(filename, resultString)
+    println(bestList.maxBy(_.fitness).plateSolution)
+  }
 //  researchGenerations()
-  research(testMutationProbabilitiesParameters)
+//  research(List(GeneticPlateProblemParameters()))
+//  seriousProblemsWithNames.par.foreach(researchRandomOptimizer)
+  seriousProblemsWithNames.foreach(researchRandomMutationOptimizer)
 }

@@ -40,7 +40,8 @@ class GeneticPlateProblemOptimizer(plateProblem: PlateProblem,
     val newBest = population.maxBy(x => x.fitness)
     if(newBest.fitness > best.fitness) {
       best = newBest
-//      println("!!!!!!!! " + best.fitness)
+      println("!!!!!!!! " + best.fitness)
+      println("!!!!!!!! " + best.plateSolution)
     }
   }
 }
