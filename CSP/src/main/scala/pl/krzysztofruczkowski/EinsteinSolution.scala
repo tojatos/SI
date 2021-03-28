@@ -8,6 +8,12 @@ import pl.krzysztofruczkowski.Smoke.Smoke
 
 case class EinsteinSolution(houses: List[House])
 case class House(color: Option[Color], nationality: Option[Nationality], drink: Option[Drink], smoke: Option[Smoke], pet: Option[Pet])
+object EinsteinSolution {
+  def empty(): EinsteinSolution = EinsteinSolution(List.fill(5)(House.empty()))
+}
+object House {
+  def empty(): House = House(None, None, None, None, None)
+}
 
 object Color extends Enumeration {
   type Color = Value
