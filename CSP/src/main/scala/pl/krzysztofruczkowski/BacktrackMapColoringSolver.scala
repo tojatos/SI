@@ -2,6 +2,8 @@ package pl.krzysztofruczkowski
 
 import com.softwaremill.quicklens._
 
+import scala.collection.parallel.CollectionConverters.ImmutableIterableIsParallelizable
+
 case class BacktrackMapColoringSolver(mapColoringProblem: MapColoringProblem) {
   // k - number of colors allowed
   def solve(k: Int): List[MapColoringSolution] = {
@@ -16,7 +18,7 @@ case class BacktrackMapColoringSolver(mapColoringProblem: MapColoringProblem) {
         }
         return
       }
-      (0 until k).foreach { colorInt =>
+      (0 until k).par.foreach { colorInt =>
         val newColorSolution = currentSolution.modify(_.pointsToColor.at(pointList(i))).setTo(Some(colorInt))
         if(mapColoringProblem.satisfiesWeakRequirements(newColorSolution)) {
           iterateSolution(i+1, newColorSolution)

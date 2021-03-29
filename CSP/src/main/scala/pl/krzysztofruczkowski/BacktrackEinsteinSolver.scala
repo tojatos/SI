@@ -16,19 +16,19 @@ object BacktrackEinsteinSolver {
         }
         return
       }
-      Color.values.toList.par.foreach { color =>
+      Color.values.par.foreach { color =>
         val coloredSolution = currentSolution.modify(_.houses.at(i).color).setTo(Some(color))
         if (EinsteinProblem.satisfiesWeakRequirements(coloredSolution)) {
-          Nationality.values.toList.par.foreach { nationality =>
+          Nationality.values.par.foreach { nationality =>
             val nationalSolution = coloredSolution.modify(_.houses.at(i).nationality).setTo(Some(nationality))
             if (EinsteinProblem.satisfiesWeakRequirements(nationalSolution)) {
-              Drink.values.toList.par.foreach { drink =>
+              Drink.values.par.foreach { drink =>
                 val drinkSolution = nationalSolution.modify(_.houses.at(i).drink).setTo(Some(drink))
                 if (EinsteinProblem.satisfiesWeakRequirements(drinkSolution)) {
-                  Smoke.values.toList.par.foreach { smoke =>
+                  Smoke.values.par.foreach { smoke =>
                     val smokeSolution = drinkSolution.modify(_.houses.at(i).smoke).setTo(Some(smoke))
                     if (EinsteinProblem.satisfiesWeakRequirements(smokeSolution)) {
-                      Pet.values.toList.par.foreach { pet =>
+                      Pet.values.par.foreach { pet =>
                         val petSolution = smokeSolution.modify(_.houses.at(i).pet).setTo(Some(pet))
                         if (EinsteinProblem.satisfiesWeakRequirements(petSolution)) {
                           iterateSolution(i+1, petSolution)
