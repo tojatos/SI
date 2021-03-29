@@ -56,4 +56,10 @@ class EinsteinSpec extends AnyWordSpec with Matchers {
     }
   }
 
+  "BacktrackEinsteinSolver" must {
+    "return corrrect solution" in {
+      BacktrackEinsteinSolver.solve() shouldEqual List(correctSolution)
+    }
+  }
+
 }
