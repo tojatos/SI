@@ -16,7 +16,7 @@ class PointUtilsSpec extends AnyWordSpec with Matchers {
       val (x2, y2) = (2, 2)
       val (x3, y3) = (1, 2)
       val (x4, y4) = (2, 1)
-      PointUtils.intersects(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual true
+      PointUtils.intersectsOrCollinear(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual true
     }
 
     "not detect intersection" in {
@@ -24,7 +24,7 @@ class PointUtilsSpec extends AnyWordSpec with Matchers {
       val (x2, y2) = (1, 2)
       val (x3, y3) = (2, 2)
       val (x4, y4) = (2, 1)
-      PointUtils.intersects(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual false
+      PointUtils.intersectsOrCollinear(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual false
     }
 
     "detect collinear intersection" in {
@@ -32,7 +32,7 @@ class PointUtilsSpec extends AnyWordSpec with Matchers {
       val (x2, y2) = (2, 2)
       val (x3, y3) = (3, 3)
       val (x4, y4) = (4, 4)
-      PointUtils.intersects(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual true
+      PointUtils.intersectsOrCollinear(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual true
     }
   }
 }

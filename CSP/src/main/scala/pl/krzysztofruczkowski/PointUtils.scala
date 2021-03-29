@@ -9,11 +9,9 @@ object PointUtils {
     random.shuffle(combinations).take(pointsCount).toList
   }
 
-  def intersects(x1: Int, y1: Int, x2: Int, y2: Int, x3: Int, y3: Int, x4: Int, y4: Int): Boolean = {
+  def intersectsOrCollinear(x1: Int, y1: Int, x2: Int, y2: Int, x3: Int, y3: Int, x4: Int, y4: Int): Boolean = {
     // https: //stackoverflow.com/a/3838357/7136056
-    //    val i1 = (Math.min(x1, x2), Math.max(x1, x2))
-    //    val i2 = (Math.min(x3, x4), Math.max(x3, x4))
-    if (Math.max(x1, x2) < Math.min(x3, x4)) return false
+    // if (Math.max(x1, x2) < Math.min(x3, x4)) return false
     val a1 =
       if(x1 - x2 == 0) 0
       else (y1 - y2) / (x1 - x2)
@@ -22,8 +20,15 @@ object PointUtils {
       else (y3 - y4) / (x3 - x4)
 
     // parallel
-    // TODO: check if collinear
-    if (a1 == a2) return false
+    if (a1 == a2) {
+      val a3 = {
+        if(x1 - x3 == 0) 0
+        else (y1 - y3) / (x1 - x3)
+      }
+
+      // return true if collinear or false if just parallel
+      return a1 == a3
+    }
 
     val b1 = y1 - a1 * x1
     val b2 = y3 - a2 * x3
@@ -37,4 +42,7 @@ object PointUtils {
     else true
 
   }
+
+  def intersectsOrCollinear(p1: (Int, Int), p2: (Int, Int), p3: (Int, Int), p4: (Int, Int)): Boolean =
+    intersectsOrCollinear(p1._1, p1._2, p2._1, p2._2, p3._1, p3._2, p4._1, p4._2)
 }
