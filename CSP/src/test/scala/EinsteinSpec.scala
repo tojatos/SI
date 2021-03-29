@@ -27,13 +27,13 @@ class EinsteinSpec extends AnyWordSpec with Matchers {
 
     "accept weak incorrect solution" in {
       val incorrectSolution = EinsteinSolution(List(
-        House(Option(Color.Blue), Option(Nationality.Norwegian), Option(Drink.Water), Option(Smoke.Kools), Option(Pet.Fox)),
-        House(Option(Color.Red), Option(Nationality.Ukrainian), Option(Drink.Tea), Option(Smoke.Chesterfield), Option(Pet.Horse)),
-        House(Option(Color.Yellow), Option(Nationality.Englishman), Option(Drink.Milk), Option(Smoke.OldGold), Option(Pet.Snails)),
-        House(Option(Color.Ivory), Option(Nationality.Spaniard), Option(Drink.OrangeJuice), Option(Smoke.LuckyStrike), Option(Pet.Dog)),
-        House(Option(Color.Green), Option(Nationality.Japanese), Option(Drink.Coffee), Option(Smoke.Parliament), Option(Pet.Zebra)),
+        House(Option(Color.Blue), None, None, None, None),
+        House(Option(Color.Red), None, None, None, None),
+        House(Option(Color.Yellow), None, None, None, None),
+        House(Option(Color.Ivory), None, None, None, None),
+        House(Option(Color.Green), None, None, None, None),
       ))
-      EinsteinProblem.satisfiesWeakRequirements(correctSolution) shouldEqual true
+      EinsteinProblem.satisfiesWeakRequirements(incorrectSolution) shouldEqual true
     }
 
     "reject weak incorrect solution" in {
