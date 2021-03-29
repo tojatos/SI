@@ -15,10 +15,12 @@ case class BacktrackMapColoringSolver(mapColoringProblem: MapColoringProblem) {
       if (i >= pointList.size) {
         if(mapColoringProblem.satisfiesRequirements(currentSolution)) {
           solutionList = currentSolution :: solutionList
+//          print("!!")
         }
+//        println(currentSolution)
         return
       }
-      (0 until k).par.foreach { colorInt =>
+      (1 to k).foreach { colorInt =>
         val newColorSolution = currentSolution.modify(_.pointsToColor.at(pointList(i))).setTo(Some(colorInt))
         if(mapColoringProblem.satisfiesWeakRequirements(newColorSolution)) {
           iterateSolution(i+1, newColorSolution)
@@ -26,6 +28,6 @@ case class BacktrackMapColoringSolver(mapColoringProblem: MapColoringProblem) {
       }
     }
     iterateSolution(0, emptySolution)
-    solutionList
+    solutionList.distinct
   }
 }
