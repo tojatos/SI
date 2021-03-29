@@ -1,17 +1,23 @@
 package pl.krzysztofruczkowski
 
-import scala.util.Random
-
-
 case class MapColoringProblem(connections: Map[(Int, Int),List[(Int, Int)]]) {
-  def isSolution(solution: MapColoringSolution): Boolean = {
+  def satisfiesRequirements(solution: MapColoringSolution): Boolean =
+    solution.pointsToColor.size == connections.size &&
+      solution.pointsToColor.forall(_._2.isDefined) &&
+      satisfiesWeakRequirements(solution)
+
+  def satisfiesWeakRequirements(solution: MapColoringSolution): Boolean = {
     if(connections.size != solution.pointsToColor.size) return false
 
     for ((point, otherPoints) <- connections) {
       val firstColor = solution.pointsToColor(point)
-      for (otherPoint <- otherPoints) {
-        val secondColor = solution.pointsToColor(otherPoint)
-        if(firstColor != secondColor) return false
+      if(firstColor.isDefined) {
+        for (otherPoint <- otherPoints) {
+          val secondColor = solution.pointsToColor(otherPoint)
+          if(secondColor.isDefined) {
+            if(firstColor == secondColor) return false
+          }
+        }
       }
     }
     true
