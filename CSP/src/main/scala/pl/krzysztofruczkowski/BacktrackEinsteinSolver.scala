@@ -4,6 +4,7 @@ import com.softwaremill.quicklens._
 
 import scala.collection.parallel.CollectionConverters.ImmutableIterableIsParallelizable
 
+//TODO: add lock to solution list and run in parallel
 object BacktrackEinsteinSolver {
   def solve(): List[EinsteinSolution] = {
     val emptySolution = EinsteinSolution.empty()
@@ -16,19 +17,19 @@ object BacktrackEinsteinSolver {
         }
         return
       }
-      Color.values.par.foreach { color =>
+      Color.values.foreach { color =>
         val coloredSolution = currentSolution.modify(_.houses.at(i).color).setTo(Some(color))
         if (EinsteinProblem.satisfiesWeakRequirements(coloredSolution)) {
-          Nationality.values.par.foreach { nationality =>
+          Nationality.values.foreach { nationality =>
             val nationalSolution = coloredSolution.modify(_.houses.at(i).nationality).setTo(Some(nationality))
             if (EinsteinProblem.satisfiesWeakRequirements(nationalSolution)) {
-              Drink.values.par.foreach { drink =>
+              Drink.values.foreach { drink =>
                 val drinkSolution = nationalSolution.modify(_.houses.at(i).drink).setTo(Some(drink))
                 if (EinsteinProblem.satisfiesWeakRequirements(drinkSolution)) {
-                  Smoke.values.par.foreach { smoke =>
+                  Smoke.values.foreach { smoke =>
                     val smokeSolution = drinkSolution.modify(_.houses.at(i).smoke).setTo(Some(smoke))
                     if (EinsteinProblem.satisfiesWeakRequirements(smokeSolution)) {
-                      Pet.values.par.foreach { pet =>
+                      Pet.values.foreach { pet =>
                         val petSolution = smokeSolution.modify(_.houses.at(i).pet).setTo(Some(pet))
                         if (EinsteinProblem.satisfiesWeakRequirements(petSolution)) {
                           iterateSolution(i+1, petSolution)

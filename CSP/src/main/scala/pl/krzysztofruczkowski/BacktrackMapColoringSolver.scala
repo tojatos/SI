@@ -2,8 +2,7 @@ package pl.krzysztofruczkowski
 
 import com.softwaremill.quicklens._
 
-import scala.collection.parallel.CollectionConverters.ImmutableIterableIsParallelizable
-
+//TODO: add lock to solution list and run in parallel
 case class BacktrackMapColoringSolver(mapColoringProblem: MapColoringProblem) {
   // k - number of colors allowed
   def solve(k: Int): List[MapColoringSolution] = {
@@ -15,9 +14,7 @@ case class BacktrackMapColoringSolver(mapColoringProblem: MapColoringProblem) {
       if (i >= pointList.size) {
         if(mapColoringProblem.satisfiesRequirements(currentSolution)) {
           solutionList = currentSolution :: solutionList
-//          print("!!")
         }
-//        println(currentSolution)
         return
       }
       (1 to k).foreach { colorInt =>
