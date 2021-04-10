@@ -2,32 +2,8 @@ package pl.krzysztofruczkowski
 
 import scala.util.Random
 
-case class MapColoringProblem(connections: Map[(Int, Int),List[(Int, Int)]]) {
-  def satisfiesRequirements(solution: MapColoringSolution): Boolean =
-    solution.pointsToColor.size == connections.size &&
-      solution.pointsToColor.forall(_._2.isDefined) &&
-      satisfiesWeakRequirements(solution)
-
-  def satisfiesWeakRequirements(solution: MapColoringSolution): Boolean = {
-    if(connections.size != solution.pointsToColor.size) return false
-
-    for ((point, otherPoints) <- connections) {
-      val firstColor = solution.pointsToColor(point)
-      if(firstColor.isDefined) {
-        for (otherPoint <- otherPoints) {
-          val secondColor = solution.pointsToColor(otherPoint)
-          if(secondColor.isDefined) {
-            if(firstColor == secondColor) return false
-          }
-        }
-      }
-    }
-    true
-  }
-}
-
-object MapColoringProblem {
-  def generate(pointsCount: Int, mapSize: Int)(implicit random: Random = new Random()): MapColoringProblem = {
+object MapColoringGenerator {
+  def generate(pointsCount: Int, mapSize: Int)(implicit random: Random = new Random()): Map[Point,List[Point]] = {
     val randomPoints: List[(Int, Int)] = PointUtils.generateRandom(pointsCount, mapSize)
     //    val randomPoints: List[(Int, Int)] = (1 to pointCount).map(_ => (random.between(0, maxX), random.between(0, maxY))).toList.distinct
     val pointsMap = scala.collection.mutable.Map[(Int, Int),List[(Int, Int)]]()
@@ -61,6 +37,6 @@ object MapColoringProblem {
         }
       }
     }
-    MapColoringProblem(pointsMap.toMap)
+    pointsMap.toMap
   }
 }

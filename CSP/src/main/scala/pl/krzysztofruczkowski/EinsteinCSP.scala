@@ -74,7 +74,7 @@ class EinsteinCSP() extends CSP() {
     e => e.houses.find(_.smoke.contains(Smoke.Parliament)).exists(_.nationality.contains(Nationality.Japanese)),
     e => Math.abs(e.houses.indexWhere(_.nationality.contains(Nationality.Norwegian)) - e.houses.indexWhere(_.color.contains(Color.Blue))) == 1,
   )
-  val emptyInstance = CSPInstance(
+  override val emptyInstance = CSPInstance(
     variables = Vector.fill(25)(None),
     domains = Vector.fill(5)(Color.values.toList)
       ++ Vector.fill(5)(Nationality.values.toList)
@@ -116,6 +116,6 @@ class EinsteinCSP() extends CSP() {
       ),
     )
   )
-  val weakConstraints: Seq[Constraint] = weakRequirements.map(f => (variables: Seq[Variable]) => f(variablesToSolution(variables)))
-  val constraints: Seq[Constraint] = requirements.map(f => (variables: Seq[Variable]) => f(variablesToSolution(variables)))
+  override val weakConstraints: Seq[Constraint] = weakRequirements.map(f => (variables: Seq[Variable]) => f(variablesToSolution(variables)))
+  override val constraints: Seq[Constraint] = requirements.map(f => (variables: Seq[Variable]) => f(variablesToSolution(variables)))
 }

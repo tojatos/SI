@@ -1,6 +1,6 @@
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import pl.krzysztofruczkowski.{BacktrackMapColoringSolver, MapColoringProblem, MapColoringSolution, PointUtils}
+import pl.krzysztofruczkowski.PointUtils
 
 class PointUtilsSpec extends AnyWordSpec with Matchers {
 
