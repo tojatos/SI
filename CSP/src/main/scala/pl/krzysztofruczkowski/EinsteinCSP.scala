@@ -6,6 +6,9 @@ import pl.krzysztofruczkowski.Nationality.Nationality
 import pl.krzysztofruczkowski.Pet.Pet
 import pl.krzysztofruczkowski.Smoke.Smoke
 
+import scala.List
+import scala.collection.immutable
+
 
 class EinsteinCSP() extends CSP() {
   val weakRequirements = List[EinsteinSolution => Boolean](

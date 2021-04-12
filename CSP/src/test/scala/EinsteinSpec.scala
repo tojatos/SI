@@ -44,4 +44,10 @@ class EinsteinSpec extends AnyWordSpec with Matchers {
       BacktrackSolver(problem).solve() shouldEqual List(correctSolution)
     }
   }
+
+  "ForwardCheckingSolver" must {
+    "return corrrect solution" in {
+      ForwardCheckingSolver(problem).solve() shouldEqual List(correctSolution)
+    }
+  }
 }

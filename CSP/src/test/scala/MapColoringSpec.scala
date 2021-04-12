@@ -1,6 +1,6 @@
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import pl.krzysztofruczkowski.{BacktrackSolver, MapColoringCSP}
+import pl.krzysztofruczkowski.{BacktrackSolver, ForwardCheckingSolver, MapColoringCSP}
 
 class MapColoringSpec extends AnyWordSpec with Matchers {
 
@@ -71,6 +71,18 @@ class MapColoringSpec extends AnyWordSpec with Matchers {
       BacktrackSolver(problem2_2).solve().size shouldEqual 0
       BacktrackSolver(problem2_3).solve().size shouldEqual 6
       BacktrackSolver(problem2_4).solve().size shouldEqual 48
+    }
+  }
+
+  "ForwardCheckingSolver" must {
+    "return correct number of solutions" in {
+      ForwardCheckingSolver(problem1_2).solve().size shouldEqual 0
+      ForwardCheckingSolver(problem1_3).solve().size shouldEqual 6
+      ForwardCheckingSolver(problem1_4).solve().size shouldEqual 24
+
+      ForwardCheckingSolver(problem2_2).solve().size shouldEqual 0
+      ForwardCheckingSolver(problem2_3).solve().size shouldEqual 6
+      ForwardCheckingSolver(problem2_4).solve().size shouldEqual 48
     }
   }
 }
