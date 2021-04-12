@@ -3,12 +3,7 @@ package pl.krzysztofruczkowski
 import com.softwaremill.quicklens._
 
 //TODO: add lock to solution list and run in parallel
-case class BacktrackSolver(problem: CSP) {
-
-  def selectIndex(currentSolution: CSPInstance): Int = {
-    val available = (currentSolution.variables zip currentSolution.domains).zipWithIndex.filter(_._1._1.isEmpty)
-    available.head._2
-  }
+case class BacktrackSolver(problem: CSP, variableSelector: VariableSelector = DefaultVariableSelector()) {
 
   def solve(): List[Seq[Variable]] = {
     val emptyInstance = problem.emptyInstance
@@ -21,7 +16,7 @@ case class BacktrackSolver(problem: CSP) {
           return
         }
       }
-      val i = selectIndex(currentSolution)
+      val i = variableSelector.selectIndex(currentSolution)
       currentSolution.domains(i).foreach(d => {
         val newSolution = currentSolution.modify(_.variables.at(i)).setTo(Some(d))
         if (problem.satisfiesWeakConstraints(newSolution.variables)) {
