@@ -2,10 +2,7 @@ package pl.krzysztofruczkowski
 
 import com.softwaremill.quicklens._
 
-import scala.annotation.tailrec
-
 //TODO: add lock to solution list and run in parallel
-
 case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelector = MinDomainVariableSelector()) {
   def unassignedVariablesHaveLegalValues(i: CSPInstance): Boolean = {
     val available = i.variables zip i.domains filter(_._1.isEmpty)
@@ -13,7 +10,7 @@ case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelecto
   }
 
   def selectValue(currentSolution: CSPInstance, i: Int) = {
-    currentSolution.domains(i).head //TODO: use heuristics
+    currentSolution.domains(i).head
   }
 
   def getNewSolution(currentSolution: CSPInstance, i: Int, newValue: Any) = {
@@ -44,8 +41,6 @@ case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelecto
         }
       }
       val i = variableSelector.selectIndex(currentSolution)
-//      println(i)
-//      println(currentSolution)
 
       if(currentSolution.domains(i).isEmpty) return
 

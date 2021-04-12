@@ -13,7 +13,7 @@ object Main extends App {
     )
   val mapColoringProblem = new MapColoringCSP(m1, 3)
   println(BacktrackSolver(mapColoringProblem).solve().size)
-  val m2 = MapColoringGenerator.generate(4, 10)
+  val m2 = MapColoringGenerator.generate(20, 10)
   println(m2)
   val mapColoringProblem2_3 = new MapColoringCSP(m2, 3)
   val mapColoringProblem2_4 = new MapColoringCSP(m2, 4)

@@ -1,6 +1,6 @@
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import pl.krzysztofruczkowski.{BacktrackSolver, ForwardCheckingSolver, MapColoringCSP}
+import pl.krzysztofruczkowski.{BacktrackSolver, ForwardCheckingSolver, MapColoringCSP, MapColoringForwardCheckingSolver, MapColoringGenerator, MaxConstraintValueSelector, MinConstraintValueSelector, MinDomainVariableSelector}
 
 class MapColoringSpec extends AnyWordSpec with Matchers {
 
@@ -83,6 +83,29 @@ class MapColoringSpec extends AnyWordSpec with Matchers {
       ForwardCheckingSolver(problem2_2).solve().size shouldEqual 0
       ForwardCheckingSolver(problem2_3).solve().size shouldEqual 6
       ForwardCheckingSolver(problem2_4).solve().size shouldEqual 48
+    }
+  }
+
+  "MapColoringForwardCheckingSolver" must {
+    "return correct number of solutions" in {
+      MapColoringForwardCheckingSolver(problem1_2).solve().size shouldEqual 0
+      MapColoringForwardCheckingSolver(problem1_3).solve().size shouldEqual 6
+      MapColoringForwardCheckingSolver(problem1_4).solve().size shouldEqual 24
+
+      MapColoringForwardCheckingSolver(problem2_2).solve().size shouldEqual 0
+      MapColoringForwardCheckingSolver(problem2_3).solve().size shouldEqual 6
+      MapColoringForwardCheckingSolver(problem2_4).solve().size shouldEqual 48
+    }
+
+    "use heuristics" in {
+      MapColoringForwardCheckingSolver(problem1_4, MinDomainVariableSelector(), MinConstraintValueSelector()).solve().size shouldEqual 24
+    }
+
+    "solve random problem" in {
+      val m = MapColoringGenerator.generate(10, 10)
+      println(m)
+      val randomMapColoringProblem = new MapColoringCSP(m, 4)
+      MapColoringForwardCheckingSolver(randomMapColoringProblem, MinDomainVariableSelector(), MinConstraintValueSelector()).solve() should not be empty
     }
   }
 }
