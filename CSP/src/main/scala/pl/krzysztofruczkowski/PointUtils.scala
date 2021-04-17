@@ -12,6 +12,9 @@ object PointUtils {
   def intersectsOrCollinear(x1: Int, y1: Int, x2: Int, y2: Int, x3: Int, y3: Int, x4: Int, y4: Int): Boolean = {
     // https: //stackoverflow.com/a/3838357/7136056
     // if (Math.max(x1, x2) < Math.min(x3, x4)) return false
+    val points = List((x1, y1), (x2, y2), (x3, y3), (x4, y4))
+    if(points.toSet.size < 4) return false // allow intersection at point
+
     val a1 =
       if(x1 - x2 == 0) 0
       else (y1 - y2) / (x1 - x2)

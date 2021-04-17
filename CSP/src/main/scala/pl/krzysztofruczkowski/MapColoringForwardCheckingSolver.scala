@@ -37,7 +37,12 @@ case class MaxConstraintValueSelector() extends ValueSelector() {
 //TODO: add lock to solution list and run in parallel
 case class MapColoringForwardCheckingSolver(problem: MapColoringCSP,
                                             variableSelector: VariableSelector = MinDomainVariableSelector(),
-                                            valueSelector: ValueSelector = DefaultValueSelector()) {
+                                            valueSelector: ValueSelector = DefaultValueSelector()) extends Solver() {
+  override var visitedNodes = 0
+  override var firstSolutionFound = false
+  override var solved = false
+  override var firstSolutionVisitedNodes = 0
+
 
   def unassignedVariablesHaveLegalValues(i: CSPInstance): Boolean = {
     val available = i.variables zip i.domains filter(_._1.isEmpty)
@@ -65,6 +70,8 @@ case class MapColoringForwardCheckingSolver(problem: MapColoringCSP,
     def iterateSolution(currentSolution: CSPInstance): Unit = {
       if (currentSolution.variables.forall(_.isDefined)) {
         if (problem.satisfiesConstraints(currentSolution.variables)) {
+          firstSolutionFound = true
+          firstSolutionVisitedNodes = visitedNodes
           solutionList = currentSolution.variables :: solutionList
           return
         }
@@ -75,6 +82,7 @@ case class MapColoringForwardCheckingSolver(problem: MapColoringCSP,
 
       val newValue = valueSelector.selectValue(problem, currentSolution, i)
       val newSolution = getNewSolution(currentSolution, i, newValue)
+      visitedNodes += 1
       if (unassignedVariablesHaveLegalValues(newSolution) && problem.satisfiesWeakConstraints(newSolution.variables)) {
         iterateSolution(newSolution)
       }
@@ -84,7 +92,12 @@ case class MapColoringForwardCheckingSolver(problem: MapColoringCSP,
       val solutionWithUpdatedDomain = currentSolution.modify(_.domains.at(i)).setTo(newDomain)
       iterateSolution(solutionWithUpdatedDomain)
     }
+    visitedNodes = 0
+    firstSolutionFound = false
+    firstSolutionVisitedNodes = 0
+    solved = false
     iterateSolution(emptyInstance)
+    solved = true
     solutionList
   }
 }

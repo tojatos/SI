@@ -9,10 +9,15 @@ object MapColoringGenerator {
     val pointsMap = scala.collection.mutable.Map[(Int, Int),List[(Int, Int)]]()
 
     //TODO: find a better end condition
-    for (_ <- 1 to 10000) {
-      val p: List[(Int, Int)] = random.shuffle(randomPoints).take(2)
-      val p1 = p(0)
-      val p2 = p(1)
+    for (_ <- 1 to 1000000) {
+      val (p1, p2): ((Int, Int),(Int, Int)) = if(pointsMap.size == pointsCount) {
+        val p = random.shuffle(randomPoints).take(2)
+        (p(0), p(1))
+      } else {
+        val r1 = randomPoints.filterNot(x => pointsMap.contains(x)).take(1).head
+        val r2 = random.shuffle(randomPoints.filterNot(x => x == r1)).take(1).head
+        (r1, r2)
+      }
       val isAlreadyConnected = pointsMap.get(p1) match {
         case None => false
         case Some(x) => x.contains(p2)

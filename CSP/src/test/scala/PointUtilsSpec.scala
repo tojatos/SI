@@ -34,5 +34,13 @@ class PointUtilsSpec extends AnyWordSpec with Matchers {
       val (x4, y4) = (4, 4)
       PointUtils.intersectsOrCollinear(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual true
     }
+
+    "not detect point intersection" in {
+      val (x1, y1) = (2, 7)
+      val (x2, y2) = (4, 5)
+      val (x3, y3) = (3, 4)
+      val (x4, y4) = (4, 5)
+      PointUtils.intersectsOrCollinear(x1, y1, x2, y2, x3, y3, x4, y4) shouldEqual false
+    }
   }
 }

@@ -3,7 +3,12 @@ package pl.krzysztofruczkowski
 import com.softwaremill.quicklens._
 
 //TODO: add lock to solution list and run in parallel
-case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelector = MinDomainVariableSelector()) {
+case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelector = MinDomainVariableSelector()) extends Solver() {
+  override var visitedNodes = 0
+  override var firstSolutionFound = false
+  override var solved = false
+  override var firstSolutionVisitedNodes = 0
+
   def unassignedVariablesHaveLegalValues(i: CSPInstance): Boolean = {
     val available = i.variables zip i.domains filter(_._1.isEmpty)
     available.forall(_._2.nonEmpty)
@@ -36,6 +41,8 @@ case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelecto
     def iterateSolution(currentSolution: CSPInstance): Unit = {
       if (currentSolution.variables.forall(_.isDefined)) {
         if (problem.satisfiesConstraints(currentSolution.variables)) {
+          firstSolutionFound = true
+          firstSolutionVisitedNodes = visitedNodes
           solutionList = currentSolution.variables :: solutionList
           return
         }
@@ -46,6 +53,7 @@ case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelecto
 
       val newValue = selectValue(currentSolution, i)
       val newSolution = getNewSolution(currentSolution, i, newValue)
+      visitedNodes += 1
       if (unassignedVariablesHaveLegalValues(newSolution) && problem.satisfiesWeakConstraints(newSolution.variables)) {
         iterateSolution(newSolution)
       }
@@ -55,7 +63,13 @@ case class ForwardCheckingSolver(problem: CSP, variableSelector: VariableSelecto
       val solutionWithUpdatedDomain = currentSolution.modify(_.domains.at(i)).setTo(newDomain)
       iterateSolution(solutionWithUpdatedDomain)
     }
+    visitedNodes = 0
+    firstSolutionFound = false
+    firstSolutionVisitedNodes = 0
+    solved = false
     iterateSolution(emptyInstance)
+    solved = true
     solutionList
   }
+
 }
