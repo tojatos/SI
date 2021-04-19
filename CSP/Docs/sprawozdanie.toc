@@ -1,0 +1,11 @@
+\contentsline {section}{Zbadanie wpływu zastosowania heurystyk na liczbę przeszukanych stanów}{2}{section*.2}%
+\contentsline {subsection}{Cel badania}{2}{section*.3}%
+\contentsline {subsection}{Parametry badania}{2}{section*.4}%
+\contentsline {subsection}{Wyniki i wykresy}{2}{section*.5}%
+\contentsline {subsection}{Wnioski}{4}{section*.11}%
+\contentsline {section}{Porównanie metod sprawdzania wprzód oraz przeszukiwania z powrotami}{5}{section*.12}%
+\contentsline {subsection}{Cel badania}{5}{section*.13}%
+\contentsline {subsection}{Parametry badania}{5}{section*.14}%
+\contentsline {subsection}{Wyniki i wykresy}{5}{section*.15}%
+\contentsline {subsection}{Wnioski}{6}{section*.20}%
+\contentsline {section}{Podsumowanie}{7}{section*.21}%

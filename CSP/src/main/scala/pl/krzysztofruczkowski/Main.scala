@@ -54,6 +54,11 @@ object Main extends App {
 
   val availableColors = 4
   val nList = List(2, 3, 4, 6, 8, 9, 10, 12, 13, 14)
+  val variableSelectors = List(DefaultVariableSelector(), MinDomainVariableSelector(), MaxDomainVariableSelector())
+  val valueSelectors = List(DefaultValueSelector(), MinConstraintValueSelector(), MaxConstraintValueSelector())
+
+//  variableSelectors.foreach(selector => println(selector.getClass.getName))
+
   val mapColoringMaps = nList.map(n => {
     var m = MapColoringGenerator.generate(n, 100)
     while (m.size != n) {
@@ -65,18 +70,34 @@ object Main extends App {
   val mapColoringProblems = mapColoringMaps.map(m => new MapColoringCSP(m, availableColors))
   println("Problems generated.")
 
-  for (problem <- mapColoringProblems) {
-    println(problem.points.size)
-    measure(MapColoringForwardCheckingSolver(problem))
-  }
-
-  for (problem <- mapColoringProblems) {
-    println(problem.points.size)
-    measure(BacktrackSolver(problem))
-  }
+//  for (problem <- mapColoringProblems) {
+//    println(problem.points.size)
+//    measure(MapColoringForwardCheckingSolver(problem))
+//  }
+//
+//  for (problem <- mapColoringProblems) {
+//    println(problem.points.size)
+//    measure(BacktrackSolver(problem))
+//  }
 
 //  measure(ForwardCheckingSolver(einsteinProblem))
 //  measure(BacktrackSolver(einsteinProblem))
+
+//  for (selector <- variableSelectors) {
+//    for (problem <- mapColoringProblems) {
+//      println(problem.points.size)
+//      println(selector.getClass.getName)
+//      measure(MapColoringForwardCheckingSolver(problem, variableSelector = selector))
+//    }
+//  }
+
+  for (selector <- valueSelectors) {
+    for (problem <- mapColoringProblems) {
+      println(problem.points.size)
+      println(selector.getClass.getName)
+      measure(MapColoringForwardCheckingSolver(problem, valueSelector = selector))
+    }
+  }
 
 //  println(solver.solve())
 //
